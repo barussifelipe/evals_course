@@ -1,0 +1,8 @@
+{
+  "orchestrator": {"skill": "evals-course-orchestrator", "model": "gpt-5.6-sol", "reasoning_effort": "low"},
+  "orchestrator_judge": {"skill": "orchestrator-judge", "model": "gpt-5.6-sol", "reasoning_effort": "medium"},
+  "searcher": {"skill": "evals-course-searcher", "model": "gpt-5.6-luna", "reasoning_effort": "low"},
+  "searcher_judge": {"skill": "searcher-judge", "model": "gpt-5.6-terra", "reasoning_effort": "medium"},
+  "builder": {"skill": "evals-course-builder", "model": "gpt-5.6-sol", "reasoning_effort": "low"},
+  "builder_judge": {"skill": "builder-judge", "model": "gpt-5.6-sol", "reasoning_effort": "low"}
+}
