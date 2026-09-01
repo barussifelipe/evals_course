@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Cold Review",
   "type": "object",
-  "required": ["review_id", "judge", "judgee", "artifact_revision", "context_revision", "verdict", "total_score", "penalties", "penalty_total", "aspects", "deterministic_checks", "evidence", "strengths", "defects", "qualitative_feedback"],
+  "required": ["review_id", "judge", "judgee", "artifact_revision", "context_revision", "verdict", "total_score", "penalties", "penalty_total", "penalty_evidence", "aspects", "deterministic_checks", "evidence", "strengths", "defects", "qualitative_feedback"],
   "properties": {
     "review_id": {"type": "string", "pattern": "^REV-[A-Z0-9-]+$"},
     "judge": {"enum": ["orchestrator-judge", "searcher-judge", "builder-judge"]},
@@ -16,12 +16,27 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["penalty_id", "reason", "points", "evidence_ids"],
+        "required": ["penalty_id", "reason", "points", "penalty_evidence_ids"],
         "properties": {
           "penalty_id": {"enum": ["PEN-001", "PEN-002", "PEN-003", "PEN-004", "PEN-005", "PEN-006", "PEN-007", "PEN-008"]},
           "reason": {"type": "string", "minLength": 1},
           "points": {"type": "integer", "minimum": 2, "maximum": 5},
-          "evidence_ids": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^EV-[A-Z0-9-]+$"}}
+          "penalty_evidence_ids": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^PEV-[A-Z0-9-]+$"}}
+        },
+        "additionalProperties": false
+      }
+    },
+    "penalty_evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["penalty_evidence_id", "type", "target", "locator", "observation"],
+        "properties": {
+          "penalty_evidence_id": {"type": "string", "pattern": "^PEV-[A-Z0-9-]+$"},
+          "type": {"enum": ["workflow_log", "task_brief", "revision_record", "tool_output", "git_record", "handoff_record"]},
+          "target": {"type": "string"},
+          "locator": {"type": "string"},
+          "observation": {"type": "string"}
         },
         "additionalProperties": false
       }
