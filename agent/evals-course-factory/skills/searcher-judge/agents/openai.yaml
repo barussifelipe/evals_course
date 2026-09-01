@@ -1,0 +1,6 @@
+interface:
+  display_name: "Searcher Judge"
+  short_description: "Cold-review claims and sources"
+  default_prompt: "Use $searcher-judge to cold-review this research artifact."
+policy:
+  allow_implicit_invocation: false
