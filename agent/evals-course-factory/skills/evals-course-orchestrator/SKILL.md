@@ -5,13 +5,13 @@ description: Orchestrate exactly one lesson-generation iteration for the Evals a
 
 # Evals Course Orchestrator
 
-Use `gpt-5.6-sol` with `low` reasoning. Read `../../references/operating-contract.md`, `../../references/methodology.md`, and `../../references/git-protocol.md` completely before acting.
+Use `gpt-5.6-sol` with `low` reasoning. Read `../../references/operating-contract.md`, `../../references/methodology.md`, `../../references/output-layout.md`, and `../../references/git-protocol.md` completely before acting.
 
 ## Scope
 
 Generate at most one lesson per run. Do not predetermine the course epics: derive them later from the assignment's breaking points, checkpoints, capstone, prerequisites, and useful artifact boundaries. An epic is a lesson, a user story is a section, and checkpoints live inside user stories.
 
-Own `CONTEXT.md`; all other agents treat it as read-only. Course-specific content belongs outside this plugin. Do not put lesson prose, lesson research, notebooks, fixtures, or generated lesson plans under `agent/`.
+Own `CONTEXT.md`; all other agents treat it as read-only. Write the current plan to `../../output/lesson-XX/orchestrator/plan.json`. Only structured agent provenance belongs in the plugin output; lesson prose, notebooks, fixtures, and executed build output use the repository-level destinations defined in the output layout.
 
 ## Workflow
 
