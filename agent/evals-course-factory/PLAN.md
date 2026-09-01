@@ -7,7 +7,7 @@ Provide a reusable Codex plugin that generates the Evals and LLM-as-Judge course
 ## Per-run sequence
 
 1. The Sol-low orchestrator reads the assignment and `CONTEXT.md`, then plans exactly one approved epic using the agile mapping epic=lesson, user story=section, checkpoint=observable capability within a story.
-2. The Sol-medium orchestrator judge cold-reviews the plan and returns a 1-5 weighted score plus evidence-backed feedback.
+2. The Sol-high orchestrator judge cold-reviews the plan and returns a 1-5 weighted score plus evidence-backed feedback.
 3. The Luna-low searcher researches only that plan, prioritizing papers and claim-level traceability.
 4. The Terra-medium searcher judge verifies sources, entailment, coverage, and citations.
 5. The Terra-medium builder creates one lesson and one cumulative offline Jupyter build-along.
