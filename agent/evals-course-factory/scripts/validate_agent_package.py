@@ -41,7 +41,7 @@ def main() -> int:
     agents = json.loads((ROOT / "config" / "agents.json").read_text(encoding="utf-8"))
     expected = {
         "orchestrator": ("gpt-5.6-sol", "low"),
-        "orchestrator_judge": ("gpt-5.6-sol", "medium"),
+        "orchestrator_judge": ("gpt-5.6-sol", "high"),
         "searcher": ("gpt-5.6-luna", "low"),
         "searcher_judge": ("gpt-5.6-terra", "medium"),
         "builder": ("gpt-5.6-terra", "medium"),
