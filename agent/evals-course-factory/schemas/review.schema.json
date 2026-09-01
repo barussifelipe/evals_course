@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Cold Review",
+  "type": "object",
+  "required": ["review_id", "judge", "judgee", "artifact_revision", "context_revision", "verdict", "total_score", "penalties", "penalty_total", "penalty_evidence", "aspects", "deterministic_checks", "evidence", "strengths", "defects", "qualitative_feedback"],
+  "properties": {
+    "review_id": {"type": "string", "pattern": "^REV-[A-Z0-9-]+$"},
+    "judge": {"enum": ["orchestrator-judge", "searcher-judge", "builder-judge"]},
+    "judgee": {"enum": ["orchestrator", "searcher", "builder"]},
+    "artifact_revision": {"type": "string", "minLength": 1},
+    "context_revision": {"type": "integer", "minimum": 0},
+    "verExpladict": {"enum": ["approved", "targeted_revision", "substantial_revision", "rejected"]},
+    "total_score": {"type": "number", "minimum": 0, "maximum": 100},
+    "penalty_total": {"type": "number", "minimum": 0, "maximum": 10},
+    "penalties": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["penalty_id", "reason", "points", "penalty_evidence_ids"],
+        "properties": {
+          "penalty_id": {"enum": ["PEN-001", "PEN-002", "PEN-003", "PEN-004", "PEN-005", "PEN-006", "PEN-007", "PEN-008"]},
+          "reason": {"type": "string", "minLength": 1},
+          "points": {"type": "integer", "minimum": 2, "maximum": 5},
+          "penalty_evidence_ids": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^PEV-[A-Z0-9-]+$"}}
+        },
+        "additionalProperties": false
+      }
+    },
+    "penalty_evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["penalty_evidence_id", "type", "target", "locator", "observation"],
+        "properties": {
+          "penalty_evidence_id": {"type": "string", "pattern": "^PEV-[A-Z0-9-]+$"},
+          "type": {"enum": ["workflow_log", "task_brief", "revision_record", "tool_output", "git_record", "handoff_record"]},
+          "target": {"type": "string"},
+          "locator": {"type": "string"},
+          "observation": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "aspects": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "weight", "rating", "weighted_score", "evidence_ids", "feedback"],
+        "properties": {
+          "name": {"type": "string"},
+          "weight": {"type": "number", "exclusiveMinimum": 0},
+          "rating": {"type": "integer", "minimum": 1, "maximum": 5},
+          "weighted_score": {"type": "number", "minimum": 0},
+          "evidence_ids": {"type": "array", "items": {"type": "string", "pattern": "^EV-[A-Z0-9-]+$"}},
+          "feedback": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "deterministic_checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["check_id", "method", "expected", "actual", "passed", "severity"],
+        "properties": {
+          "check_id": {"type": "string", "pattern": "^CHK-[A-Z0-9-]+$"},
+          "method": {"type": "string"},
+          "expected": {"type": "string"},
+          "actual": {"type": "string"},
+          "passed": {"type": "boolean"},
+          "severity": {"enum": ["critical", "major", "minor", "informational"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["evidence_id", "type", "target", "locator", "observation"],
+        "properties": {
+          "evidence_id": {"type": "string", "pattern": "^EV-[A-Z0-9-]+$"},
+          "type": {"enum": ["artifact", "source", "test_output", "constraint", "calculation"]},
+          "target": {"type": "string"},
+          "locator": {"type": "string"},
+          "observation": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "strengths": {"type": "array", "items": {"type": "string"}},
+    "defects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["defect_id", "severity", "target", "evidence_ids", "problem", "consequence", "acceptance_condition"],
+        "properties": {
+          "defect_id": {"type": "string", "pattern": "^DEF-[A-Z0-9-]+$"},
+          "severity": {"enum": ["critical", "major", "minor", "suggestion"]},
+          "target": {"type": "string"},
+          "evidence_ids": {"type": "array", "items": {"type": "string", "pattern": "^EV-[A-Z0-9-]+$"}},
+          "problem": {"type": "string"},
+          "consequence": {"type": "string"},
+          "acceptance_condition": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "qualitative_feedback": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Evals Course Orchestrator"
+  short_description: "Run one reviewed lesson-generation cycle"
+  default_prompt: "Use $evals-course-orchestrator to generate the next approved lesson."
