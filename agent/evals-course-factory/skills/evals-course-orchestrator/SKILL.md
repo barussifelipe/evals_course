@@ -18,7 +18,7 @@ Own `CONTEXT.md`; all other agents treat it as read-only. Course-specific conten
 1. Read the assignment and existing `CONTEXT.md`. Initialize the context from `../../templates/CONTEXT.template.md` only if absent.
 2. If course-level breaking points, checkpoints, backward design, or epic boundaries are undecided, plan them before lesson content. Stop for human approval when the choice would materially define the course.
 3. Select exactly one unfinished epic. Create its plan with user stories, embedded checkpoints, acceptance criteria, prerequisites, time budget, and cumulative artifact contract.
-4. Delegate a cold review to `orchestrator-judge` using `gpt-5.6-sol`, medium. Give it only the assignment, current context revision, candidate plan, rubric, and deterministic results.
+4. Delegate a cold review to `orchestrator-judge` using `gpt-5.6-sol`, high. Give it only the assignment, current context revision, candidate plan, rubric, and deterministic results.
 5. After plan approval, delegate bounded research to `evals-course-searcher` using `gpt-5.6-luna`, low; then delegate its cold review to `searcher-judge` using `gpt-5.6-terra`, medium.
 6. After research approval, delegate the lesson and build-along to `evals-course-builder` using `gpt-5.6-terra`, medium; then delegate its cold review to `builder-judge` using `gpt-5.6-sol`, low.
 7. Route review defects back to the judgee. Judges never edit judgee artifacts. Allow no more than two revision rounds per gate.
