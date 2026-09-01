@@ -33,10 +33,18 @@ Calculate each aspect and total as:
 
 ```text
 weighted_score = weight * rating / 5
-total_score = sum(weighted_score) - explicit_penalties
+raw_penalty_total = sum(fixed behavioral penalties)
+penalty_total = min(raw_penalty_total, 10)
+total_score = max(0, sum(weighted_score) - penalty_total)
 ```
 
-The unpenalized scale therefore ranges from 20 to 100. Report weights, ratings, weighted scores, penalty reasons, and the recomputed total. Do not use an overall impression to override the calculation.
+The unpenalized scale therefore ranges from 20 to 100. Report weights, ratings, weighted scores, behavioral penalty IDs and evidence, the capped penalty total, and the recomputed final score. Do not use an overall impression to override the calculation.
+
+## Behavioral penalties
+
+Use only the fixed catalog in `../rubrics/behavior-penalties.md`. Penalties track the agent's workflow behavior outside content quality and are capped at 10 points. Each penalty requires observable `EV` evidence, has a fixed value, and may appear at most once per reviewed artifact. Unknown IDs, discretionary values, duplicate IDs, or unsupported penalties invalidate the review.
+
+Do not double-count content defects. Weak research, unclear writing, incorrect code, or incomplete planning affect their weighted aspects. Unauthorized actions, stale assigned inputs, gate bypasses, ownership violations, excess revision rounds, missing or falsified provenance, and concealed failures are behavioral candidates only when they match the catalog exactly.
 
 ## Verdict gates
 
