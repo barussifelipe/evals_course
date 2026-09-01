@@ -31,4 +31,8 @@ Do not decide epic boundaries in this reusable plugin. The orchestrator derives 
 - Builder: lesson, notebook, fixtures, recorded output, and learner artifacts.
 - Judges: their own review artifacts only.
 
-No agent edits its judge's report. No judge edits its judgee's artifacts. Course-specific outputs stay outside the plugin directory.
+No agent edits its judge's report. No judge edits its judgee's artifacts. Course deliverables stay outside the plugin directory; only structured agent provenance uses the plugin-local output tree.
+
+## Output routing
+
+Read `output-layout.md` before writing any artifact. The plugin-local `output/lesson-XX/` stores only agent provenance: the orchestrator plan and review, searcher sources and review, and builder review. Course prose remains one file per lesson in `course/`; build code remains under `build/lesson-XX/`; actual executed build results remain under the repository-level `output/lesson-XX/`.
