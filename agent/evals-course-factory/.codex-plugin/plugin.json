@@ -1,0 +1,18 @@
+{
+  "name": "evals-course-factory",
+  "version": "0.1.0",
+  "description": "Orchestrate and cold-review one lesson per run for an AI-generated evals course.",
+  "author": {
+    "name": "Felipe Barussi"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Evals Course Factory",
+    "shortDescription": "Generate one reviewed evals lesson per run.",
+    "longDescription": "Plans, researches, builds, and cold-reviews one lesson at a time while preserving shared context and human-only merge control.",
+    "developerName": "Felipe Barussi",
+    "category": "Education",
+    "capabilities": ["Multi-agent", "Research", "Write", "Review"],
+    "defaultPrompt": ["Plan and generate the next course lesson.", "Review the current lesson-generation state."]
+  }
+}
