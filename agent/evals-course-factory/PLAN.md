@@ -16,7 +16,7 @@ Provide a reusable Codex plugin that generates the Evals and LLM-as-Judge course
 
 ## Acceptance model
 
-Each rubric uses integer ratings from 1 to 5. `weighted_score = weight * rating / 5`; the total is the weighted sum minus explicit penalties. Approval requires at least 85/100, every aspect at least 3/5, all hard checks passing, and no critical defect.
+Each rubric uses integer ratings from 1 to 5. `weighted_score = weight * rating / 5`; the total is the weighted sum minus fixed, evidence-backed agent-behavior penalties capped at 10 points. Approval requires at least 85/100, every aspect at least 3/5, all hard checks passing, and no critical defect.
 
 ## Git boundary
 
