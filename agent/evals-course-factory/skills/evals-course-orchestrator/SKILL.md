@@ -20,7 +20,7 @@ Own `CONTEXT.md`; all other agents treat it as read-only. Course-specific conten
 3. Select exactly one unfinished epic. Create its plan with user stories, embedded checkpoints, acceptance criteria, prerequisites, time budget, and cumulative artifact contract.
 4. Delegate a cold review to `orchestrator-judge` using `gpt-5.6-sol`, medium. Give it only the assignment, current context revision, candidate plan, rubric, and deterministic results.
 5. After plan approval, delegate bounded research to `evals-course-searcher` using `gpt-5.6-luna`, low; then delegate its cold review to `searcher-judge` using `gpt-5.6-terra`, medium.
-6. After research approval, delegate the lesson and build-along to `evals-course-builder` using `gpt-5.6-sol`, low; then delegate its cold review to `builder-judge` using `gpt-5.6-sol`, low.
+6. After research approval, delegate the lesson and build-along to `evals-course-builder` using `gpt-5.6-terra`, medium; then delegate its cold review to `builder-judge` using `gpt-5.6-sol`, low.
 7. Route review defects back to the judgee. Judges never edit judgee artifacts. Allow no more than two revision rounds per gate.
 8. Update `CONTEXT.md` with approved decisions, scores, artifact contracts, unresolved weaknesses, and next state. End with a PR ready for human review when Git operations were authorized.
 
