@@ -43,6 +43,17 @@ None.
 
 None selected. One epic maximum per orchestrator run.
 
+## Output routing
+
+Agent provenance root: `agent/evals-course-factory/output/lesson-XX/`
+
+- Orchestrator plan/reviews: `orchestrator/`
+- Searcher sources/reviews: `searcher/`
+- Builder reviews: `builder/`
+- Lesson prose: `course/lesson-XX.md` (exactly one file per lesson)
+- Build code and learner artifacts: `build/lesson-XX/`
+- Actual executed build output: repository-level `output/lesson-XX/`
+
 ## Cross-epic artifact interfaces
 
 Undecided.
