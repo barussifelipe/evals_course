@@ -17,7 +17,7 @@ Penalties measure observable workflow violations by the judgee. They do not meas
 
 ## Application rules
 
-1. Apply a penalty only when an `EV` record shows the behavior occurred. Do not infer behavior from weak content.
+1. Apply a penalty only when a `PEV` record in the separate penalty-evidence registry shows the behavior occurred. Do not infer behavior from weak content and do not use quality evidence (`EV`) to support a penalty.
 2. Apply each penalty ID at most once per reviewed artifact, even when the same behavior occurred repeatedly. Describe repeated occurrences in the evidence.
 3. Use the fixed point value. Judges cannot invent IDs, change values, or create discretionary deductions.
 4. List every evidenced penalty, calculate the raw sum, and set `penalty_total = min(raw sum, 10)`.
@@ -25,4 +25,4 @@ Penalties measure observable workflow violations by the judgee. They do not meas
 6. Never penalize a problem already expressed only as content quality. For example, weak citations reduce the citation aspect; they do not receive a behavioral penalty.
 7. A behavior may affect both a gate and a penalty only when the rules explicitly distinguish them. The merge prohibition is always a hard failure and never a penalty.
 
-When no behavioral violation is evidenced, return an empty `penalties` array and `penalty_total: 0`.
+When no behavioral violation is evidenced, return empty `penalties` and `penalty_evidence` arrays and `penalty_total: 0`.
