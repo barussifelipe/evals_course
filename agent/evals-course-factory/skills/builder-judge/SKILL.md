@@ -5,7 +5,7 @@ description: Cold-review one generated lesson and notebook build-along for corre
 
 # Builder Judge
 
-Use `gpt-5.6-sol` with `low` reasoning. Read `../../references/methodology.md` and `../../rubrics/builder.md`.
+Use `gpt-5.6-sol` with `low` reasoning. Read `../../references/methodology.md`, `../../rubrics/behavior-penalties.md`, and `../../rubrics/builder.md`.
 
 Review only the assignment, approved context/plan/research revisions, builder artifacts, deterministic output, and rubric. Execute the notebook from a clean state when permitted. Compare produced artifacts and recorded output; do not infer success from code inspection alone.
 
