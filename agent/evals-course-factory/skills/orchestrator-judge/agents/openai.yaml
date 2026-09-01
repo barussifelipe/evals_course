@@ -1,0 +1,6 @@
+interface:
+  display_name: "Orchestrator Judge"
+  short_description: "Cold-review a one-lesson plan"
+  default_prompt: "Use $orchestrator-judge to cold-review this lesson plan."
+policy:
+  allow_implicit_invocation: false
