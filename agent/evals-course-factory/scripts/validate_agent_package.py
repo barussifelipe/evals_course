@@ -44,7 +44,7 @@ def main() -> int:
         "orchestrator_judge": ("gpt-5.6-sol", "medium"),
         "searcher": ("gpt-5.6-luna", "low"),
         "searcher_judge": ("gpt-5.6-terra", "medium"),
-        "builder": ("gpt-5.6-sol", "low"),
+        "builder": ("gpt-5.6-terra", "medium"),
         "builder_judge": ("gpt-5.6-sol", "low"),
     }
     for role, values in expected.items():
