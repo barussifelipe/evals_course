@@ -1,0 +1,6 @@
+interface:
+  display_name: "Builder Judge"
+  short_description: "Cold-review one lesson and build-along"
+  default_prompt: "Use $builder-judge to cold-review this lesson and notebook."
+policy:
+  allow_implicit_invocation: false
