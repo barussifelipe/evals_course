@@ -1,6 +1,7 @@
 {
+  "_comment": "Cost-conscious configuration: production agents do not use the highest model tier or effort for every task, reducing token usage. Judges use a superior model tier where practical; the orchestrator judge uses the same Sol tier as the orchestrator with stronger high reasoning effort.",
   "orchestrator": {"skill": "evals-course-orchestrator", "model": "gpt-5.6-sol", "reasoning_effort": "low"},
-  "orchestrator_judge": {"skill": "orchestrator-judge", "model": "gpt-5.6-sol", "reasoning_effort": "medium"},
+  "orchestrator_judge": {"skill": "orchestrator-judge", "model": "gpt-5.6-sol", "reasoning_effort": "high"},
   "searcher": {"skill": "evals-course-searcher", "model": "gpt-5.6-luna", "reasoning_effort": "low"},
   "searcher_judge": {"skill": "searcher-judge", "model": "gpt-5.6-terra", "reasoning_effort": "medium"},
   "builder": {"skill": "evals-course-builder", "model": "gpt-5.6-terra", "reasoning_effort": "medium"},
