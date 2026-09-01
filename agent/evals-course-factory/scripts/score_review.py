@@ -36,6 +36,13 @@ def evaluate(review: dict) -> tuple[float, str, list[str]]:
         "PEN-008": 5,
     }
     seen_penalties: set[str] = set()
+    penalty_evidence_ids = {
+        item.get("penalty_evidence_id") for item in review.get("penalty_evidence", [])
+    }
+    if None in penalty_evidence_ids:
+        errors.append("penalty evidence record is missing penalty_evidence_id")
+    if len(penalty_evidence_ids) != len(review.get("penalty_evidence", [])):
+        errors.append("duplicate penalty evidence ID")
     raw_penalty_total = 0.0
     for penalty in review.get("penalties", []):
         penalty_id = penalty.get("penalty_id")
@@ -49,9 +56,26 @@ def evaluate(review: dict) -> tuple[float, str, list[str]]:
         expected_points = penalty_catalog[penalty_id]
         if float(penalty.get("points", -1)) != expected_points:
             errors.append(f"{penalty_id}: points should be {expected_points}")
-        if not penalty.get("evidence_ids"):
-            errors.append(f"{penalty_id}: at least one evidence ID is required")
+        references = penalty.get("penalty_evidence_ids", [])
+        if not references:
+            errors.append(f"{penalty_id}: at least one PEV evidence ID is required")
+        for reference in references:
+            if not isinstance(reference, str) or not reference.startswith("PEV-"):
+                errors.append(f"{penalty_id}: invalid penalty evidence ID {reference}")
+            elif reference not in penalty_evidence_ids:
+                errors.append(f"{penalty_id}: unresolved penalty evidence ID {reference}")
         raw_penalty_total += expected_points
+
+    referenced_penalty_evidence = {
+        reference
+        for penalty in review.get("penalties", [])
+        for reference in penalty.get("penalty_evidence_ids", [])
+    }
+    orphaned_penalty_evidence = penalty_evidence_ids - referenced_penalty_evidence
+    if orphaned_penalty_evidence:
+        errors.append(
+            "orphaned penalty evidence IDs: " + ", ".join(sorted(orphaned_penalty_evidence))
+        )
 
     penalty_total = min(raw_penalty_total, 10.0)
     if abs(float(review.get("penalty_total", -1)) - penalty_total) > 0.01:
