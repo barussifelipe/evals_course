@@ -1,0 +1,6 @@
+interface:
+  display_name: "Evals Course Builder"
+  short_description: "Build one approved lesson and notebook"
+  default_prompt: "Use $evals-course-builder to build this approved lesson."
+policy:
+  allow_implicit_invocation: false
