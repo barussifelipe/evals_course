@@ -10,7 +10,7 @@ Provide a reusable Codex plugin that generates the Evals and LLM-as-Judge course
 2. The Sol-medium orchestrator judge cold-reviews the plan and returns a 1-5 weighted score plus evidence-backed feedback.
 3. The Luna-low searcher researches only that plan, prioritizing papers and claim-level traceability.
 4. The Terra-medium searcher judge verifies sources, entailment, coverage, and citations.
-5. The Sol-low builder creates one lesson and one cumulative offline Jupyter build-along.
+5. The Terra-medium builder creates one lesson and one cumulative offline Jupyter build-along.
 6. The Sol-low builder judge executes deterministic checks and cold-reviews correctness, learning structure, artifact compounding, and citation fidelity.
 7. The judgee may remediate findings for at most two rounds. The orchestrator records results and leaves any authorized PR ready for human review.
 
