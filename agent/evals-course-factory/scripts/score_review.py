@@ -25,7 +25,38 @@ def evaluate(review: dict) -> tuple[float, str, list[str]]:
         if abs(float(item["weighted_score"]) - expected) > 0.01:
             errors.append(f"{item['name']}: weighted score should be {expected:.2f}")
 
-    calculated -= sum(float(item["points"]) for item in review.get("penalties", []))
+    penalty_catalog = {
+        "PEN-001": 2,
+        "PEN-002": 3,
+        "PEN-003": 4,
+        "PEN-004": 2,
+        "PEN-005": 2,
+        "PEN-006": 3,
+        "PEN-007": 5,
+        "PEN-008": 5,
+    }
+    seen_penalties: set[str] = set()
+    raw_penalty_total = 0.0
+    for penalty in review.get("penalties", []):
+        penalty_id = penalty.get("penalty_id")
+        if penalty_id not in penalty_catalog:
+            errors.append(f"unknown behavioral penalty {penalty_id}")
+            continue
+        if penalty_id in seen_penalties:
+            errors.append(f"duplicate behavioral penalty {penalty_id}")
+            continue
+        seen_penalties.add(penalty_id)
+        expected_points = penalty_catalog[penalty_id]
+        if float(penalty.get("points", -1)) != expected_points:
+            errors.append(f"{penalty_id}: points should be {expected_points}")
+        if not penalty.get("evidence_ids"):
+            errors.append(f"{penalty_id}: at least one evidence ID is required")
+        raw_penalty_total += expected_points
+
+    penalty_total = min(raw_penalty_total, 10.0)
+    if abs(float(review.get("penalty_total", -1)) - penalty_total) > 0.01:
+        errors.append(f"penalty total should be {penalty_total:.2f}")
+    calculated -= penalty_total
     calculated = round(max(0.0, calculated), 2)
     if abs(float(review.get("total_score", -1)) - calculated) > 0.01:
         errors.append(f"total score should be {calculated:.2f}")
