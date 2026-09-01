@@ -18,6 +18,10 @@ Provide a reusable Codex plugin that generates the Evals and LLM-as-Judge course
 
 Each rubric uses integer ratings from 1 to 5. `weighted_score = weight * rating / 5`; the total is the weighted sum minus fixed, evidence-backed agent-behavior penalties capped at 10 points. Approval requires at least 85/100, every aspect at least 3/5, all hard checks passing, and no critical defect.
 
+## Output routing
+
+Agent provenance is grouped per epic under `agent/evals-course-factory/output/lesson-XX/`: orchestrator plans and reviews under `orchestrator/`, searcher sources and reviews under `searcher/`, and builder reviews under `builder/`. Course content remains exactly one `course/lesson-XX.md` file per lesson. Notebook code and learner artifacts remain in `build/lesson-XX/`; actual executed results remain in the repository-level `output/lesson-XX/`.
+
 ## Git boundary
 
 When separately authorized, agents may create a branch, commit one owned file per commit with `[actual_branch] - ["gpt-agent"]: description`, push, open a draft PR to `main`, and post the three required milestone comments. No agent ever merges or enables auto-merge. Only the human user may merge.
