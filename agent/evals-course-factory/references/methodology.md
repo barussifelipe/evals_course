@@ -10,12 +10,13 @@
 | `CLM` | Research-supported claim | `CLM-L01-004` |
 | `SRC` | Source | `SRC-L01-003` |
 | `EV` | Evidence used by a judge | `EV-BJ-L01-007` |
+| `PEV` | Agent-behavior evidence supporting a penalty | `PEV-BJ-L01-002` |
 | `CHK` | Deterministic check | `CHK-BUILD-012` |
 | `DEF` | Review defect | `DEF-BJ-L01-003` |
 | `REV` | Review record | `REV-BUILDER-L01-02` |
 | `DEC` | Orchestrator decision | `DEC-L01-005` |
 
-IDs are locators, not proof. Each ID must resolve within its artifact to a description and a precise file, URL, field, section, cell, command, or output location.
+IDs are locators, not proof. Each ID must resolve within its artifact to a description and a precise file, URL, field, section, cell, command, or output location. Use `EV` only for evidence supporting quality ratings, deterministic checks, strengths, and defects. Use `PEV` only for observable workflow behavior supporting a penalty; never cite an `EV` record as penalty evidence or a `PEV` record as content-quality evidence.
 
 ## Ratings and weights
 
@@ -42,7 +43,7 @@ The unpenalized scale therefore ranges from 20 to 100. Report weights, ratings, 
 
 ## Behavioral penalties
 
-Use only the fixed catalog in `../rubrics/behavior-penalties.md`. Penalties track the agent's workflow behavior outside content quality and are capped at 10 points. Each penalty requires observable `EV` evidence, has a fixed value, and may appear at most once per reviewed artifact. Unknown IDs, discretionary values, duplicate IDs, or unsupported penalties invalidate the review.
+Use only the fixed catalog in `../rubrics/behavior-penalties.md`. Penalties track the agent's workflow behavior outside content quality and are capped at 10 points. Each penalty requires observable `PEV` evidence from the review's separate penalty-evidence registry, has a fixed value, and may appear at most once per reviewed artifact. Unknown IDs, discretionary values, duplicate IDs, missing `PEV` references, or unsupported penalties invalidate the review.
 
 Do not double-count content defects. Weak research, unclear writing, incorrect code, or incomplete planning affect their weighted aspects. Unauthorized actions, stale assigned inputs, gate bypasses, ownership violations, excess revision rounds, missing or falsified provenance, and concealed failures are behavioral candidates only when they match the catalog exactly.
 
