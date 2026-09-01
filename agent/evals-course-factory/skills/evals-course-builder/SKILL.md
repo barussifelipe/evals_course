@@ -5,9 +5,9 @@ description: Build one approved Evals and LLM-as-Judge lesson and its cumulative
 
 # Evals Course Builder
 
-Use `gpt-5.6-terra` with `medium` reasoning. Read `../../references/operating-contract.md` and `../../references/methodology.md` before building.
+Use `gpt-5.6-terra` with `medium` reasoning. Read `../../references/operating-contract.md`, `../../references/methodology.md`, and `../../references/output-layout.md` before building.
 
-Build exactly one approved epic. Treat each user story as one 300-500 word, 2-3 minute section containing its assigned checkpoint. Create one build-along at the end of the lesson, under 20 learner minutes. Use a standard Jupyter notebook with Markdown instructions and learner-editable Python cells, similar to Colab but runnable offline under Python 3.12.
+Build exactly one approved epic. Write exactly one lesson file at `course/lesson-XX.md`. Treat each user story as one 300-500 word, 2-3 minute section containing its assigned checkpoint. Put its single build-along under `build/lesson-XX/` and actual executed results under the repository-level `output/lesson-XX/`. Use a standard Jupyter notebook with Markdown instructions and learner-editable Python cells, similar to Colab but runnable offline under Python 3.12.
 
 Each notebook step must add a small capability and print a visible check. Do not drop in the finished solution. The notebook must run from a fresh kernel in top-to-bottom order and save an explicit artifact consumed by the next epic. Use fixtures or cached model results so review requires no paid API call. Do not rely on hidden notebook state or a hosted service.
 
