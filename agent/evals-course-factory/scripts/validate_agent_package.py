@@ -13,6 +13,7 @@ REQUIRED = [
     "config/agents.json",
     "references/operating-contract.md",
     "references/methodology.md",
+    "references/output-layout.md",
     "references/git-protocol.md",
     "templates/CONTEXT.template.md",
     "schemas/lesson-plan.schema.json",
