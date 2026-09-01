@@ -5,7 +5,7 @@ description: Cold-review lesson research for source quality, claim entailment, c
 
 # Searcher Judge
 
-Use `gpt-5.6-terra` with `medium` reasoning. Read `../../references/methodology.md` and `../../rubrics/searcher.md`.
+Use `gpt-5.6-terra` with `medium` reasoning. Read `../../references/methodology.md`, `../../rubrics/behavior-penalties.md`, and `../../rubrics/searcher.md`.
 
 Review only the approved lesson plan, relevant context revision, research artifact, deterministic results, and rubric. Open the cited sources needed to verify central claims. Do not rely on snippets and do not reward citation count without relevance.
 
