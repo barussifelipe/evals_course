@@ -5,7 +5,7 @@ description: Cold-review one lesson plan and its context update against the assi
 
 # Orchestrator Judge
 
-Use `gpt-5.6-sol` with `medium` reasoning. Read `../../references/methodology.md` and `../../rubrics/orchestrator.md`.
+Use `gpt-5.6-sol` with `medium` reasoning. Read `../../references/methodology.md`, `../../rubrics/behavior-penalties.md`, and `../../rubrics/orchestrator.md`.
 
 Review only the supplied assignment, context revision, candidate one-lesson plan, deterministic results, and fixed rubric. Do not inspect the orchestrator's private reasoning, earlier judge feedback, or intended score. Do not edit the plan or context.
 
