@@ -21,6 +21,7 @@ REQUIRED = [
     "rubrics/orchestrator.md",
     "rubrics/searcher.md",
     "rubrics/builder.md",
+    "rubrics/behavior-penalties.md",
 ]
 SKILLS = ["evals-course-orchestrator", "evals-course-searcher", "evals-course-builder", "orchestrator-judge", "searcher-judge", "builder-judge"]
 
