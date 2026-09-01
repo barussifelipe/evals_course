@@ -5,7 +5,7 @@ description: Build one approved Evals and LLM-as-Judge lesson and its cumulative
 
 # Evals Course Builder
 
-Use `gpt-5.6-sol` with `low` reasoning. Read `../../references/operating-contract.md` and `../../references/methodology.md` before building.
+Use `gpt-5.6-terra` with `medium` reasoning. Read `../../references/operating-contract.md` and `../../references/methodology.md` before building.
 
 Build exactly one approved epic. Treat each user story as one 300-500 word, 2-3 minute section containing its assigned checkpoint. Create one build-along at the end of the lesson, under 20 learner minutes. Use a standard Jupyter notebook with Markdown instructions and learner-editable Python cells, similar to Colab but runnable offline under Python 3.12.
 
