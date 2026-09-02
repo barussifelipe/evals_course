@@ -1,0 +1,98 @@
+{
+  "epic_id": "EP-01",
+  "context_revision": 2,
+  "plan_revision": "1.1",
+  "title": "Make regressions measurable",
+  "purpose": "Enable a learner who has shipped an AI feature to turn a vague regression concern into a small, trustworthy binary-labeled evaluation set whose semantics and identity remain stable through judge evaluation and metric calculation.",
+  "prerequisites": [
+    "The learner has shipped or worked with an AI feature and can name an output behavior they consider unacceptable.",
+    "The learner can read and edit basic Python literals and run cells in a Jupyter notebook.",
+    "No prior evaluation, statistics, LLM-as-judge, or JSONL knowledge is assumed."
+  ],
+  "user_stories": [
+    {
+      "user_story_id": "US-L01-01",
+      "title": "Name the regression before measuring it",
+      "statement": "As an AI feature owner, I want to express one observable failure criterion so that evaluation cases are judged against a shared decision rule rather than intuition.",
+      "one_idea": "A useful eval begins with one observable failure criterion and an explicit decision boundary, not merely a collection of plausible prompts.",
+      "checkpoints": [],
+      "acceptance_criteria": [
+        "The learner-facing section distinguishes an input example from a labeled evaluation case.",
+        "The failure criterion is observable from the stored input and candidate output.",
+        "The criterion excludes unrelated preferences such as style when style is not the behavior under evaluation."
+      ],
+      "estimated_minutes": 2.5,
+      "depends_on": []
+    },
+    {
+      "user_story_id": "US-L01-02",
+      "title": "Define the positive class",
+      "statement": "As an evaluator, I want labels with an explicit positive-class meaning so that later precision and recall answer the intended regression-detection question.",
+      "one_idea": "Binary labels are meaningful only when the positive class is named and kept invariant; in this course, positive means the candidate output exhibits the defined regression.",
+      "checkpoints": [],
+      "acceptance_criteria": [
+        "The section states that label 1 means regression present and label 0 means acceptable under the selected criterion.",
+        "Examples demonstrate that unrelated output qualities do not change the label.",
+        "The section previews that precision and recall in EP-03 will measure detection of label 1 without teaching the formulas early."
+      ],
+      "estimated_minutes": 2.5,
+      "depends_on": ["US-L01-01"]
+    },
+    {
+      "user_story_id": "US-L01-03",
+      "title": "Create cases with stable identities",
+      "statement": "As an eval maintainer, I want each human-labeled case to have a stable ID and a minimal schema so that later judge predictions can be aligned without relying on file order.",
+      "one_idea": "Stable case IDs and a small explicit record schema make cumulative evaluation artifacts joinable and auditable.",
+      "checkpoints": [],
+      "acceptance_criteria": [
+        "Every record declares case_id, input, candidate_output, and human_label.",
+        "Case IDs are unique strings and human_label is restricted to integer 0 or 1.",
+        "The persisted file contains examples from both classes and preserves the positive-class convention."
+      ],
+      "estimated_minutes": 2.5,
+      "depends_on": ["US-L01-02"]
+    },
+    {
+      "user_story_id": "US-L01-04",
+      "title": "Validate before automating",
+      "statement": "As an eval maintainer, I want deterministic dataset checks so that malformed or ambiguous records fail before an LLM judge is introduced.",
+      "one_idea": "Fail-fast validation protects every downstream result because an automated judge cannot repair ambiguous labels, duplicate identity, or incomplete records.",
+      "checkpoints": [
+        {
+          "checkpoint_id": "CP-L01-03-A",
+          "capability": "Create a small, labeled evaluation set with an explicit positive class and validate its schema and class counts.",
+          "observable_check": "After completing US-L01-01 through US-L01-04, a fresh-kernel notebook run produces eval_cases.jsonl; validation reports no missing fields, invalid labels, or duplicate IDs, prints counts for labels 0 and 1, and prints an explicit PASS result."
+        }
+      ],
+      "acceptance_criteria": [
+        "The section connects each validation rule to a concrete downstream failure it prevents.",
+        "Validation covers required fields, non-empty unique IDs, allowed binary labels, and representation of both classes.",
+        "The learner is prepared to interpret the visible notebook checks rather than treating file creation alone as success."
+      ],
+      "estimated_minutes": 2.5,
+      "depends_on": ["US-L01-03"]
+    }
+  ],
+  "build_along": {
+    "estimated_minutes": 18,
+    "input_artifact": null,
+    "output_artifact": "build/lesson-01/eval_cases.jsonl",
+    "visible_checks": [
+      "Print the declared failure criterion and the invariant label mapping: 1 = regression present, 0 = acceptable under that criterion.",
+      "After creating the records, print the case count and a preview containing stable case IDs and human labels.",
+      "Validate required fields, non-empty unique case IDs, and integer labels restricted to 0 or 1; print actionable errors or PASS.",
+      "Print the class counts and fail if either class is absent.",
+      "Write eval_cases.jsonl, read it back, compare the reloaded records with the in-memory records, and print the output path plus a final PASS."
+    ],
+    "offline_replay": "The canonical Jupyter notebook uses only pinned Python 3.12-compatible local dependencies and repository-contained data. From a fresh kernel it creates, validates, writes, and reloads the JSONL artifact without network access, API keys, model weights, or paid calls; the executed notebook and its actual printed output are recorded under output/lesson-01/."
+  },
+  "capstone_trace": [
+    "CP-L01-03-A supplies the capstone's human ground truth: validated records with stable IDs, stored inputs, candidate outputs, and binary human labels.",
+    "The invariant positive-class definition (1 = regression present) determines what EP-03 precision and recall measure.",
+    "build/lesson-01/eval_cases.jsonl is independently useful as a human-reviewable regression suite and is the required input to EP-02, which must preserve case_id and human_label unchanged when producing judge_predictions.jsonl.",
+    "Schema, uniqueness, class-presence, persistence, and round-trip checks reduce the risk that the final grader reports metrics from missing, duplicated, reordered, or semantically inconsistent cases.",
+    "This lesson satisfies the first part of the capstone acceptance contract; later epics must add validated judge predictions, compute TP/FP/FN/TN, print precision and recall with explicit zero-division handling, and verify known fixture values.",
+    "Searcher brief: research only EP-01 claims needed to distinguish examples from eval cases, define binary positive-class semantics, justify stable IDs and human ground truth, and support fail-fast dataset validation; write only agent/evals-course-factory/output/lesson-01/searcher/sources.json, use real industry vocabulary, and do not research or draft EP-02/EP-03, lesson prose, notebook code, or judge metrics.",
+    "Builder brief: consume only this approved plan and approved EP-01 research; write exactly course/lesson-01.md plus the notebook, fixtures, and persisted learner artifact under build/lesson-01/, with actual executed results only under output/lesson-01/. Preserve four text-only, one-idea sections of 300-500 words and about 2-3 minutes each, followed by exactly one incremental build-along of at most 20 minutes. Use an editable Jupyter notebook that runs offline top-to-bottom from a fresh kernel on pinned Python 3.12 dependencies, prints every declared visible check, and persists eval_cases.jsonl. Do not use Mermaid, raster images, quizzes, flashcards, video, audio, paid calls, model weights, or EP-02/EP-03 content; preserve AI-generation provenance in the agent-owned workflow artifacts."
+  ]
+}
