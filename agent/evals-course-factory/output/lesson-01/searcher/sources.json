@@ -1,0 +1,125 @@
+{
+  "epic_id": "EP-01",
+  "context_revision": 3,
+  "plan_revision": "1.1",
+  "sources": [
+    {
+      "source_id": "SRC-L01-NIST-MEASURE",
+      "title": "AI RMF Core: Measure",
+      "authors": ["National Institute of Standards and Technology"],
+      "year": 2023,
+      "source_type": "standard",
+      "url": "https://airc.nist.gov/airmf-resources/airmf/5-sec-core/",
+      "doi_or_arxiv": null,
+      "authority_note": "NIST's official AI Risk Management Framework resource; its Measure function specifies documented test sets, metrics, and performance criteria."
+    },
+    {
+      "source_id": "SRC-L01-NIST-VALIDITY",
+      "title": "AI Risks and Trustworthiness: Valid and Reliable",
+      "authors": ["National Institute of Standards and Technology"],
+      "year": 2023,
+      "source_type": "standard",
+      "url": "https://airc.nist.gov/airmf-resources/airmf/3-sec-characteristics/",
+      "doi_or_arxiv": "https://doi.org/10.6028/NIST.AI.100-1",
+      "authority_note": "Official NIST AI RMF material defining validation as objective evidence that intended requirements are fulfilled and noting that failures can have unequal harm."
+    },
+    {
+      "source_id": "SRC-L01-RFC9562",
+      "title": "RFC 9562: Universally Unique Identifiers (UUIDs)",
+      "authors": ["K. Davis", "B. Peabody", "P. Leach"],
+      "year": 2024,
+      "source_type": "standard",
+      "url": "https://www.rfc-editor.org/rfc/rfc9562.html",
+      "doi_or_arxiv": null,
+      "authority_note": "IETF Standards Track specification; defines UUIDs as persistent identifiers intended to be unique without central registration."
+    },
+    {
+      "source_id": "SRC-L01-JSONLINES",
+      "title": "JSON Lines documentation",
+      "authors": ["JSON Lines maintainers"],
+      "year": 2025,
+      "source_type": "authoritative_technical",
+      "url": "https://jsonlines.org/",
+      "doi_or_arxiv": null,
+      "authority_note": "Format's canonical documentation; specifies one valid JSON value per line and newline-delimited UTF-8 records."
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "CLM-L01-001",
+      "claim": "An evaluation should state an observable performance or assurance criterion and document the test set and measurement details; a prompt collection alone does not define what counts as failure.",
+      "source_ids": ["SRC-L01-NIST-MEASURE"],
+      "source_locator": "NIST AI RMF Core, Measure 2.1 and Measure 2.3",
+      "support": "NIST requires documented test sets and details of tools used for TEVV, and measured criteria demonstrated under relevant conditions.",
+      "scope": "General AI-system evaluation and risk measurement.",
+      "limitations": "NIST does not prescribe the course's particular regression criterion or record fields.",
+      "inference": true,
+      "user_story_ids": ["US-L01-01"]
+    },
+    {
+      "claim_id": "CLM-L01-002",
+      "claim": "The intended use and requirements must be made explicit so that a label records the defined failure behavior rather than unrelated preferences.",
+      "source_ids": ["SRC-L01-NIST-VALIDITY"],
+      "source_locator": "NIST AI RMF, section 3.1 Valid and Reliable; validation definition",
+      "support": "NIST describes validation as objective evidence that requirements for a specific intended use are fulfilled and says outputs must be interpreted in context.",
+      "scope": "Criterion design for a specified intended use.",
+      "limitations": "The exclusion of style preferences is an application example, not a NIST rule.",
+      "inference": true,
+      "user_story_ids": ["US-L01-01", "US-L01-02"]
+    },
+    {
+      "claim_id": "CLM-L01-003",
+      "claim": "Binary labels are meaningful only after the evaluator names which class represents the target behavior; this course fixes 1 as regression present and 0 as acceptable under the criterion.",
+      "source_ids": ["SRC-L01-NIST-VALIDITY", "SRC-L01-NIST-MEASURE"],
+      "source_locator": "NIST AI RMF, section 3.1 Valid and Reliable; Core Measure 2.3",
+      "support": "NIST ties measurement to documented requirements and intended use, and requires performance or assurance criteria to be measured under relevant conditions; this supports explicit label semantics.",
+      "scope": "This is the course's operational binary convention.",
+      "limitations": "The 1/0 polarity is a course decision, not a universal standard.",
+      "inference": true,
+      "user_story_ids": ["US-L01-02", "US-L01-03"]
+    },
+    {
+      "claim_id": "CLM-L01-004",
+      "claim": "Stable unique identifiers allow records to remain identifiable across files and processing without relying on positional order; UUIDs are a standardized option when globally unique IDs are needed.",
+      "source_ids": ["SRC-L01-RFC9562"],
+      "source_locator": "RFC 9562, Introduction and section 1; UUID uniqueness and persistence motivation",
+      "support": "The RFC describes UUIDs as persistent, unique identifiers usable without centralized registration and suitable for database keys.",
+      "scope": "Identifier design; simple local case IDs may be sufficient for this lesson.",
+      "limitations": "A short human-readable case_id need not be a UUID; uniqueness still must be checked in the dataset.",
+      "inference": true,
+      "user_story_ids": ["US-L01-03"]
+    },
+    {
+      "claim_id": "CLM-L01-005",
+      "claim": "A minimal joinable evaluation record should preserve the input, candidate output, human ground-truth label, and stable case ID; deterministic checks should reject missing or duplicate identity before downstream automation.",
+      "source_ids": ["SRC-L01-NIST-MEASURE", "SRC-L01-RFC9562"],
+      "source_locator": "NIST AI RMF Core Measure 2.1; RFC 9562 Introduction",
+      "support": "NIST calls for documented test sets and tools, while RFC 9562 supports persistent identifiers; the exact four-field schema is a course inference.",
+      "scope": "EP-01 artifact interface and local validation.",
+      "limitations": "Sources do not mandate these exact names or JSON representation.",
+      "inference": true,
+      "user_story_ids": ["US-L01-03", "US-L01-04"]
+    },
+    {
+      "claim_id": "CLM-L01-006",
+      "claim": "JSONL persistence can represent one evaluation record per line, and a read-back comparison is a practical integrity check for the written artifact.",
+      "source_ids": ["SRC-L01-JSONLINES"],
+      "source_locator": "JSON Lines documentation, sections 1-3",
+      "support": "The format specifies valid JSON values per line, UTF-8 encoding, and newline termination; round-trip comparison is an implementation inference.",
+      "scope": "Offline local eval_cases.jsonl artifact.",
+      "limitations": "JSONL does not itself enforce schema, unique IDs, binary labels, or class balance.",
+      "inference": true,
+      "user_story_ids": ["US-L01-03", "US-L01-04"]
+    }
+  ],
+  "coverage": [
+    {"user_story_id": "US-L01-01", "claim_ids": ["CLM-L01-001", "CLM-L01-002"], "status": "covered"},
+    {"user_story_id": "US-L01-02", "claim_ids": ["CLM-L01-002", "CLM-L01-003"], "status": "covered"},
+    {"user_story_id": "US-L01-03", "claim_ids": ["CLM-L01-003", "CLM-L01-004", "CLM-L01-005", "CLM-L01-006"], "status": "covered"},
+    {"user_story_id": "US-L01-04", "claim_ids": ["CLM-L01-005", "CLM-L01-006"], "status": "partial"}
+  ],
+  "evidence_gaps": [
+    "No primary source mandates this lesson's exact four-field schema or the 1=regression polarity; these are explicit course interface decisions.",
+    "No source establishes a universal minimum sample size or class-balance threshold, or directly mandates checking both classes for this dataset; US-L01-04's both-class presence check is therefore a bounded course decision, not research evidence."
+  ]
+}
