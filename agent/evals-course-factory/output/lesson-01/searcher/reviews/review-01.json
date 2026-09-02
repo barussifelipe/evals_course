@@ -1,0 +1,219 @@
+{
+  "review_id": "REV-SEARCH-L01-01",
+  "judge": "searcher-judge",
+  "judgee": "searcher",
+  "artifact_revision": "1.0",
+  "context_revision": 3,
+  "verdict": "targeted_revision",
+  "total_score": 84,
+  "penalties": [],
+  "penalty_total": 0,
+  "penalty_evidence": [],
+  "aspects": [
+    {
+      "name": "Primary-source and paper quality",
+      "weight": 20,
+      "rating": 5,
+      "weighted_score": 20,
+      "evidence_ids": ["EV-SJ-L01-001", "EV-SJ-L01-002"],
+      "feedback": "The central claims use two official NIST AI RMF resources and an IETF Standards Track RFC; the format claim uses the canonical JSON Lines documentation."
+    },
+    {
+      "name": "Claim-to-source entailment",
+      "weight": 25,
+      "rating": 4,
+      "weighted_score": 20,
+      "evidence_ids": ["EV-SJ-L01-003", "EV-SJ-L01-004"],
+      "feedback": "The sources entail the underlying requirements for documented test sets, criteria, intended use, UUID properties, and JSONL records. The exact course schema, polarity, and read-back check are accurately disclosed as inferences."
+    },
+    {
+      "name": "Coverage of planned concepts and failure modes",
+      "weight": 15,
+      "rating": 4,
+      "weighted_score": 12,
+      "evidence_ids": ["EV-SJ-L01-005", "EV-SJ-L01-006"],
+      "feedback": "The artifact covers all four user stories, including observable criteria, label semantics, stable identity, JSONL, and missing or duplicate identity. It does not provide evidence for the plan's required both-class validation check."
+    },
+    {
+      "name": "Citation completeness and resolvability",
+      "weight": 15,
+      "rating": 4,
+      "weighted_score": 12,
+      "evidence_ids": ["EV-SJ-L01-007", "EV-SJ-L01-008"],
+      "feedback": "All four URLs resolved and every material claim has a linked source. CLM-L01-003's locator additionally names Measure 2.3 although its sole source record is the NIST Valid and Reliable page."
+    },
+    {
+      "name": "Technical accuracy and appropriate qualifications",
+      "weight": 15,
+      "rating": 4,
+      "weighted_score": 12,
+      "evidence_ids": ["EV-SJ-L01-003", "EV-SJ-L01-004", "EV-SJ-L01-006"],
+      "feedback": "The claims preserve scope and limitations, particularly that UUIDs are optional and the four fields and 1/0 convention are course decisions. The unsupported both-class validation rationale prevents a top rating."
+    },
+    {
+      "name": "Seminal/recent source balance",
+      "weight": 5,
+      "rating": 3,
+      "weighted_score": 3,
+      "evidence_ids": ["EV-SJ-L01-001"],
+      "feedback": "All sources are current (2023-2025) and suitable, but the handoff contains no seminal evaluation or dataset-quality source to complement the current standards."
+    },
+    {
+      "name": "Builder-ready structured handoff",
+      "weight": 5,
+      "rating": 5,
+      "weighted_score": 5,
+      "evidence_ids": ["EV-SJ-L01-005", "EV-SJ-L01-006"],
+      "feedback": "The JSON is parseable and separates sources, claims, scopes, limitations, inferences, user-story links, coverage, and known evidence gaps."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "check_id": "CHK-SEARCH-001",
+      "method": "Supplied deterministic claim/source linkage result and locator inspection.",
+      "expected": "Every material claim has at least one resolvable source.",
+      "actual": "6/6 claims have a linked resolvable source (100%); CLM-L01-003 has one locator inconsistency noted separately.",
+      "passed": true,
+      "severity": "major"
+    },
+    {
+      "check_id": "CHK-SEARCH-002",
+      "method": "Supplied deterministic source-authority result and direct source verification.",
+      "expected": "At least 80% of central claims have primary or authoritative support.",
+      "actual": "6/6 central claims have primary or authoritative support (100%).",
+      "passed": true,
+      "severity": "critical"
+    },
+    {
+      "check_id": "CHK-SEARCH-003",
+      "method": "Supplied deterministic duplicate-source comparison.",
+      "expected": "Duplicate records are identified and the duplicate rate is reported.",
+      "actual": "0/4 duplicate source records (0%).",
+      "passed": true,
+      "severity": "minor"
+    },
+    {
+      "check_id": "CHK-SEARCH-004",
+      "method": "Supplied deterministic metadata audit.",
+      "expected": "Required title, authors, year, source type, URL, and authority note are present.",
+      "actual": "0 sources have missing required metadata.",
+      "passed": true,
+      "severity": "major"
+    },
+    {
+      "check_id": "CHK-SEARCH-005",
+      "method": "Compare research coverage with the four approved plan user stories and their acceptance criteria.",
+      "expected": "Every approved plan concept has adequate evidence, with gaps identified.",
+      "actual": "4/4 user stories are marked covered, but no claim supports the required representation-of-both-classes validation in US-L01-04.",
+      "passed": false,
+      "severity": "major"
+    },
+    {
+      "check_id": "CHK-SEARCH-006",
+      "method": "Parse sources.json as JSON.",
+      "expected": "The research artifact parses as JSON.",
+      "actual": "Supplied deterministic result: PASS (EP-01, 4 sources, 6 claims).",
+      "passed": true,
+      "severity": "critical"
+    },
+    {
+      "check_id": "CHK-SEARCH-007",
+      "method": "Attempt strict validation against research.schema.json using jsonschema.",
+      "expected": "The schema validator executes against the candidate.",
+      "actual": "NOT RUN because the jsonschema package is unavailable; this is disclosed rather than treated as passing.",
+      "passed": false,
+      "severity": "informational"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "EV-SJ-L01-001",
+      "type": "source",
+      "target": "SRC-L01-NIST-MEASURE; SRC-L01-NIST-VALIDITY; SRC-L01-RFC9562; SRC-L01-JSONLINES",
+      "locator": "source URLs and source_type fields",
+      "observation": "All four URLs resolved in direct review. NIST and IETF are authoritative standards sources; JSON Lines is the format's canonical documentation."
+    },
+    {
+      "evidence_id": "EV-SJ-L01-002",
+      "type": "test_output",
+      "target": "Supplied deterministic results",
+      "locator": "primary/authoritative central-claim coverage",
+      "observation": "The supplied result reports 6/6 central claims supported by a primary or authoritative source (100%)."
+    },
+    {
+      "evidence_id": "EV-SJ-L01-003",
+      "type": "source",
+      "target": "SRC-L01-NIST-MEASURE; SRC-L01-NIST-VALIDITY",
+      "locator": "NIST AI RMF Core Measure 2.1 and 2.3; Valid and Reliable section 3.1",
+      "observation": "NIST requires documentation of test sets, metrics, and TEVV-tool details, measures performance or assurance criteria under relevant conditions, and defines validation against requirements for a specific intended use."
+    },
+    {
+      "evidence_id": "EV-SJ-L01-004",
+      "type": "source",
+      "target": "SRC-L01-RFC9562; SRC-L01-JSONLINES",
+      "locator": "RFC 9562 abstract and sections 1-2.1; JSON Lines sections 1-3",
+      "observation": "RFC 9562 defines UUID uniqueness, persistence, and use without central registration; JSON Lines specifies UTF-8, one valid JSON value per line, and newline terminators."
+    },
+    {
+      "evidence_id": "EV-SJ-L01-005",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-01/searcher/sources.json",
+      "locator": "claims; coverage",
+      "observation": "Six claims link the four user stories to source IDs, scopes, limitations, and explicit inference flags; all four coverage records are marked covered."
+    },
+    {
+      "evidence_id": "EV-SJ-L01-006",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-01/searcher/sources.json",
+      "locator": "CLM-L01-005, CLM-L01-006, evidence_gaps",
+      "observation": "The stated inferences cover the exact four-field schema and JSONL read-back comparison, while evidence_gaps acknowledges no evidence for a universal class-balance threshold; no claim addresses the plan's required both-class presence check."
+    },
+    {
+      "evidence_id": "EV-SJ-L01-007",
+      "type": "test_output",
+      "target": "Supplied deterministic results",
+      "locator": "claim/source linkage; duplicate and metadata checks",
+      "observation": "The supplied result reports 6/6 linked claims, 0/4 duplicates, and 0 sources missing required metadata."
+    },
+    {
+      "evidence_id": "EV-SJ-L01-008",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-01/searcher/sources.json",
+      "locator": "CLM-L01-003.source_ids and source_locator",
+      "observation": "CLM-L01-003 cites only SRC-L01-NIST-VALIDITY but its locator names both section 3.1 and Measure 2.3; Measure 2.3 belongs to SRC-L01-NIST-MEASURE."
+    },
+    {
+      "evidence_id": "EV-SJ-L01-009",
+      "type": "calculation",
+      "target": "review aspects and penalties",
+      "locator": "20x5/5 + 25x4/5 + 15x4/5 + 15x4/5 + 15x4/5 + 5x3/5 + 5x5/5 - 0",
+      "observation": "The weighted scores sum to 84; no observable workflow behavior supports a fixed penalty."
+    }
+  ],
+  "strengths": [
+    "[EV-SJ-L01-003] The NIST sources directly support explicit criteria, documented test sets, and intended-use qualification.",
+    "[EV-SJ-L01-004] The RFC and JSON Lines claims accurately keep UUID and read-back choices within their stated limits.",
+    "[EV-SJ-L01-005] The structured handoff is immediately usable by the builder because every claim has scope, limitations, and a user-story link."
+  ],
+  "defects": [
+    {
+      "defect_id": "DEF-SJ-L01-001",
+      "severity": "major",
+      "target": "agent/evals-course-factory/output/lesson-01/searcher/sources.json coverage for US-L01-04",
+      "evidence_ids": ["EV-SJ-L01-006"],
+      "problem": "The research marks US-L01-04 covered without support for its required check that both label classes are represented.",
+      "consequence": "The builder has no research-backed rationale for one of the plan's explicit downstream-safety validations.",
+      "acceptance_condition": "Add a resolvable authoritative or primary source and a scoped claim linked to US-L01-04 that supports checking representation of both outcome classes for this binary evaluation dataset, or mark US-L01-04 partial and explicitly bound the builder to the plan's course decision rather than presenting it as researched evidence."
+    },
+    {
+      "defect_id": "DEF-SJ-L01-002",
+      "severity": "minor",
+      "target": "agent/evals-course-factory/output/lesson-01/searcher/sources.json CLM-L01-003",
+      "evidence_ids": ["EV-SJ-L01-008"],
+      "problem": "The source locator names Measure 2.3 although SRC-L01-NIST-MEASURE is absent from source_ids.",
+      "consequence": "A builder cannot resolve the full locator from the claim's declared source list.",
+      "acceptance_condition": "Either add SRC-L01-NIST-MEASURE to CLM-L01-003.source_ids or remove Measure 2.3 from its locator and support text."
+    }
+  ],
+  "qualitative_feedback": "Targeted revision. The research is compact, authoritative, and well-qualified, with all supplied linkage, authority, duplicate, metadata, US coverage, and JSON-parse results disclosed. Remediate the unsupported both-class validation concept and repair the mixed-source locator; the current score is exactly 84 (84 weighted points minus zero behavioral penalties). The unavailable jsonschema check remains informational and not-run."
+}
