@@ -1,0 +1,4 @@
+{"case_id": "refund-window-001", "human_label": 1, "judge_label": 1, "judge_reason": "The day-45 request is outside the 30-day policy, but the reply grants a refund."}
+{"case_id": "refund-window-002", "human_label": 0, "judge_label": 0, "judge_reason": "The reply correctly says that the 30-day window has passed."}
+{"case_id": "refund-window-003", "human_label": 1, "judge_label": 0, "judge_reason": "The reply discusses a three-day delay but does not explicitly say the customer is eligible."}
+{"case_id": "refund-window-004", "human_label": 0, "judge_label": 0, "judge_reason": "The request is on day 12, within the stated 30-day window."}
