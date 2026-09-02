@@ -1,0 +1,245 @@
+{
+  "review_id": "REV-ORCH-L01-02",
+  "judge": "orchestrator-judge",
+  "judgee": "orchestrator",
+  "artifact_revision": "1.1",
+  "context_revision": 2,
+  "verdict": "approved",
+  "total_score": 100,
+  "penalties": [],
+  "penalty_total": 0,
+  "penalty_evidence": [],
+  "aspects": [
+    {
+      "name": "Assignment constraint coverage and traceability",
+      "weight": 20,
+      "rating": 5,
+      "weighted_score": 20,
+      "evidence_ids": ["EV-OJ-L01-001", "EV-OJ-L01-002", "EV-OJ-L01-004"],
+      "feedback": "The current run is explicitly limited to EP-01, uses four sections, places one checkpoint in the lesson, and ends with one 18-minute build-along. The plan also carries the assignment's text-only, cumulative-artifact, offline, and Python 3.12 constraints into the builder boundary."
+    },
+    {
+      "name": "Breaking points and observable checkpoints",
+      "weight": 20,
+      "rating": 5,
+      "weighted_score": 20,
+      "evidence_ids": ["EV-OJ-L01-003", "EV-OJ-L01-005"],
+      "feedback": "Context revision 2 names the course breaking points before generation, and EP-01 directly operationalizes the first one. CP-L01-03-A is embedded in US-L01-04 after the validation instruction and specifies fresh-kernel production, validation failures, class counts, and a visible PASS result."
+    },
+    {
+      "name": "Backward design from the capstone",
+      "weight": 20,
+      "rating": 5,
+      "weighted_score": 20,
+      "evidence_ids": ["EV-OJ-L01-006", "EV-OJ-L01-007"],
+      "feedback": "The checkpoint and eval_cases.jsonl are explicitly traced to the capstone's ground-truth, stable-ID, binary-label, and precision/recall requirements. The plan also identifies exactly what EP-02 and EP-03 must add without teaching those later lessons early."
+    },
+    {
+      "name": "Prerequisite and artifact dependency correctness",
+      "weight": 15,
+      "rating": 5,
+      "weighted_score": 15,
+      "evidence_ids": ["EV-OJ-L01-008", "EV-OJ-L01-009"],
+      "feedback": "The lesson assumes only basic Python and an existing AI-feature context, then orders its user stories linearly from failure definition through validation. A null input artifact is correct for the first lesson, while eval_cases.jsonl supplies the stable IDs and label semantics required by EP-02 and EP-03."
+    },
+    {
+      "name": "Task briefs and agent interface clarity",
+      "weight": 10,
+      "rating": 5,
+      "weighted_score": 10,
+      "evidence_ids": ["EV-OJ-L01-010"],
+      "feedback": "The searcher and builder briefs define narrow EP-01 responsibilities, owned output paths, required inputs and outputs, exclusions, runtime constraints, and explicit prohibitions against drafting later-epic content."
+    },
+    {
+      "name": "Offline and reproducibility strategy",
+      "weight": 10,
+      "rating": 5,
+      "weighted_score": 10,
+      "evidence_ids": ["EV-OJ-L01-011"],
+      "feedback": "The build-along requires a fresh-kernel, top-to-bottom notebook run with repository-contained data, pinned Python 3.12-compatible dependencies, no network or paid calls, visible validations, persistence, read-back equality, and captured executed output."
+    },
+    {
+      "name": "Context consistency and change tracking",
+      "weight": 5,
+      "rating": 5,
+      "weighted_score": 5,
+      "evidence_ids": ["EV-OJ-L01-012"],
+      "feedback": "The plan declares context revision 2 and plan revision 1.1, matches the approved EP-01 scope and interfaces, and is consistent with the current-epic status and revision decision recorded in CONTEXT.md."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "check_id": "CHK-ORCH-001",
+      "method": "Inspect CONTEXT.md course hierarchy and plan.json epic_id.",
+      "expected": "The course contains 2-3 lessons and the current run plans no more than one lesson.",
+      "actual": "CONTEXT.md defines three epics; plan.json contains EP-01 only.",
+      "passed": true,
+      "severity": "critical"
+    },
+    {
+      "check_id": "CHK-ORCH-002",
+      "method": "Count plan.json user_stories.",
+      "expected": "The current lesson contains 1-5 user stories.",
+      "actual": "Four user stories are present.",
+      "passed": true,
+      "severity": "critical"
+    },
+    {
+      "check_id": "CHK-ORCH-003",
+      "method": "Inspect build_along declarations and capstone_trace handoff text.",
+      "expected": "Input artifact, output artifact, offline replay method, and next-lesson interface are declared.",
+      "actual": "input_artifact is explicitly null for EP-01; output_artifact is build/lesson-01/eval_cases.jsonl; offline replay is specified; EP-02 consumes the output while preserving case_id and human_label.",
+      "passed": true,
+      "severity": "critical"
+    },
+    {
+      "check_id": "CHK-ORCH-004",
+      "method": "Count and locate checkpoints within user_stories.",
+      "expected": "The lesson contains 1-3 observable checkpoints, each assigned within a user story.",
+      "actual": "One checkpoint, CP-L01-03-A, is embedded in US-L01-04 after the validation instruction and defines visible fresh-kernel outcomes.",
+      "passed": true,
+      "severity": "critical"
+    },
+    {
+      "check_id": "CHK-ORCH-005",
+      "method": "Count build_along objects and inspect estimated_minutes.",
+      "expected": "Exactly one ending build-along is declared at no more than 20 minutes.",
+      "actual": "Exactly one build-along is declared with an 18-minute estimate after the four sections.",
+      "passed": true,
+      "severity": "critical"
+    },
+    {
+      "check_id": "CHK-ORCH-006",
+      "method": "Trace CP-L01-03-A and eval_cases.jsonl through plan.json capstone_trace to the CONTEXT.md capstone contract.",
+      "expected": "Every checkpoint and output artifact traces to an explicit capstone acceptance criterion.",
+      "actual": "The checkpoint and artifact supply validated human labels, stable IDs, inputs, and candidate outputs required for later prediction alignment and precision/recall computation.",
+      "passed": true,
+      "severity": "critical"
+    },
+    {
+      "check_id": "CHK-ORCH-007",
+      "method": "Parse the candidate as JSON.",
+      "expected": "plan.json parses successfully.",
+      "actual": "The supplied deterministic observation reports that JSON parsing succeeded.",
+      "passed": true,
+      "severity": "major"
+    },
+    {
+      "check_id": "CHK-ORCH-008",
+      "method": "Run git diff --check.",
+      "expected": "No whitespace errors are reported.",
+      "actual": "The supplied deterministic observation reports no whitespace errors.",
+      "passed": true,
+      "severity": "informational"
+    },
+    {
+      "check_id": "CHK-ORCH-009",
+      "method": "Attempt Python schema validation with jsonschema.",
+      "expected": "The schema validator executes against the candidate.",
+      "actual": "Not run: the earlier command could not execute because jsonschema is not installed. JSON parsing and rubric-field inspection were completed instead.",
+      "passed": false,
+      "severity": "informational"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "EV-OJ-L01-001",
+      "type": "constraint",
+      "target": "ref/instructions.md",
+      "locator": "Shape; Rules; How we run your submission",
+      "observation": "The assignment requires 2-3 lessons, at most five sections and 1-3 checkpoints per lesson, exactly one cumulative build-along under 20 minutes, text-only delivery, and offline replay."
+    },
+    {
+      "evidence_id": "EV-OJ-L01-002",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-01/orchestrator/plan.json",
+      "locator": "epic_id; user_stories; build_along; capstone_trace Builder brief",
+      "observation": "The plan covers EP-01 only, has four sections, one checkpoint, one 18-minute build-along, and carries the relevant delivery constraints into the builder brief."
+    },
+    {
+      "evidence_id": "EV-OJ-L01-003",
+      "type": "artifact",
+      "target": "CONTEXT.md",
+      "locator": "Breaking points; Course checkpoints",
+      "observation": "Three breaking points are established before generation, and CP-L01-03-A turns the first into an observable learner capability."
+    },
+    {
+      "evidence_id": "EV-OJ-L01-004",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-01/orchestrator/plan.json",
+      "locator": "build_along.visible_checks",
+      "observation": "Five incremental visible checks cover label semantics, record preview, schema and identity validation, class presence, persistence, and round-trip equality."
+    },
+    {
+      "evidence_id": "EV-OJ-L01-005",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-01/orchestrator/plan.json",
+      "locator": "user_stories[3].checkpoints[0]",
+      "observation": "CP-L01-03-A is assigned within US-L01-04 and requires artifact creation, validation, class-count output, and an explicit PASS from a fresh-kernel run."
+    },
+    {
+      "evidence_id": "EV-OJ-L01-006",
+      "type": "artifact",
+      "target": "CONTEXT.md",
+      "locator": "Capstone contract; Cross-epic artifact interfaces",
+      "observation": "The capstone requires stable IDs, stored inputs and outputs, human labels, judge responses, confusion counts, precision, recall, and a deterministic fixture across the declared artifact chain."
+    },
+    {
+      "evidence_id": "EV-OJ-L01-007",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-01/orchestrator/plan.json",
+      "locator": "capstone_trace[0] through capstone_trace[4]",
+      "observation": "The plan traces the checkpoint and eval_cases.jsonl to the ground-truth and alignment portions of the capstone, while reserving predictions and metric computation for later epics."
+    },
+    {
+      "evidence_id": "EV-OJ-L01-008",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-01/orchestrator/plan.json",
+      "locator": "prerequisites; user_stories[*].depends_on",
+      "observation": "Prerequisites require no prior evaluation expertise, and the four stories form a valid linear dependency chain ending in validation."
+    },
+    {
+      "evidence_id": "EV-OJ-L01-009",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-01/orchestrator/plan.json",
+      "locator": "build_along.input_artifact; build_along.output_artifact; capstone_trace[2]",
+      "observation": "The first lesson correctly has no input artifact and produces eval_cases.jsonl as the required EP-02 input with stable identity and label semantics."
+    },
+    {
+      "evidence_id": "EV-OJ-L01-010",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-01/orchestrator/plan.json",
+      "locator": "capstone_trace[5] and capstone_trace[6]",
+      "observation": "The searcher and builder briefs state scope, owned paths, inputs, deliverables, constraints, and explicit EP-02/EP-03 exclusions."
+    },
+    {
+      "evidence_id": "EV-OJ-L01-011",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-01/orchestrator/plan.json",
+      "locator": "build_along.offline_replay; build_along.visible_checks[4]",
+      "observation": "The notebook must run offline from a fresh kernel, persist and reload the artifact, compare it with in-memory records, and retain actual executed output."
+    },
+    {
+      "evidence_id": "EV-OJ-L01-012",
+      "type": "artifact",
+      "target": "CONTEXT.md and agent/evals-course-factory/output/lesson-01/orchestrator/plan.json",
+      "locator": "CONTEXT.md Current epic and DEC-L01-002; plan.json context_revision and plan_revision",
+      "observation": "Both artifacts identify context revision 2 and plan revision 1.1, with matching EP-01 scope and downstream interfaces."
+    },
+    {
+      "evidence_id": "EV-OJ-L01-013",
+      "type": "calculation",
+      "target": "agent/evals-course-factory/output/lesson-01/orchestrator/reviews/review-02.json",
+      "locator": "aspects; penalties; total_score",
+      "observation": "Weighted aspect scores total 100 and no supported behavioral penalty applies, producing a final score of 100."
+    }
+  ],
+  "strengths": [
+    "[EV-OJ-L01-005] The single checkpoint is both correctly placed and directly observable through concrete fresh-kernel output.",
+    "[EV-OJ-L01-007] Backward traceability keeps EP-01 useful on its own while preserving an explicit path to the grader's precision and recall.",
+    "[EV-OJ-L01-010] The searcher and builder briefs are narrowly bounded enough to prevent scope leakage into later epics.",
+    "[EV-OJ-L01-011] Offline replay includes visible validation, persistence, read-back comparison, and captured execution output."
+  ],
+  "defects": [],
+  "qualitative_feedback": "Approved for bounded EP-01 research. Revision 1.1 fully resolves the observable checkpoint-placement and downstream-handoff requirements visible in the assigned context: the checkpoint follows the necessary validation instruction, the output artifact has an explicit EP-02 interface, and both agent briefs prevent later-epic expansion. All critical orchestrator checks pass, every weighted aspect is supported by precise evidence, and no observable judgee behavior supports a fixed penalty. The unavailable jsonschema dependency is disclosed as an informational not-run check and does not negate successful JSON parsing or manual verification of the rubric's hard constraints."
+}
