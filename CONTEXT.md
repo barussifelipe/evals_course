@@ -1,15 +1,15 @@
 # Course generation context
 
 Context revision: 10
-Status: EP-02 builder revision 1.1 complete; deterministic replay passed
+Status: EP-02 complete; draft PR ready for human review
 
 ## Human control and Git safety
 
 Only the human user may merge a pull request. No agent may merge, auto-merge, squash-and-merge, rebase-and-merge, close a PR as merged, or enable auto-merge. A passing judge score is not merge authorization. The final automated state is **PR ready for human review**.
 
-Current branch: not assigned
-Current pull request: not opened
-Authorized Git actions: none recorded
+Current branch: `LESSON-02-builder`
+Current pull request: `#3` — https://github.com/barussifelipe/evals_course/pull/3
+Authorized Git actions: the human authorized lesson-02 commits, branch push, draft PR creation, and milestone comments on 2026-09-02
 
 ## Assignment constraints
 
@@ -141,4 +141,4 @@ Approved course-level terminology: an epic is one lesson; a user story is one se
 
 ## Next authorized action
 
-Await human direction for the EP-03 planning iteration. Do not perform Git or hosting mutations without explicit authorization.
+Draft PR #3 is ready for human review. Only the human may merge it. Await human direction for the EP-03 planning iteration.
