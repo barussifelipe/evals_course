@@ -1,0 +1,238 @@
+{
+  "review_id": "REV-BUILDER-L02-01",
+  "judge": "builder-judge",
+  "judgee": "builder",
+  "artifact_revision": "1.0",
+  "context_revision": 8,
+  "verdict": "approved",
+  "total_score": 100,
+  "penalties": [],
+  "penalty_total": 0,
+  "penalty_evidence": [],
+  "aspects": [
+    {
+      "name": "Technical correctness",
+      "weight": 20,
+      "rating": 5,
+      "weighted_score": 20,
+      "evidence_ids": ["EV-BJ-L02-001", "EV-BJ-L02-002"],
+      "feedback": "The notebook strictly validates the three-field cached-response contract, binary verdict domain, non-empty reasons, duplicate/unknown/missing IDs, and exact case coverage before converting verdicts. It aligns by stable case_id, preserves human labels, and produces the intended four prediction records including one inspectable disagreement."
+    },
+    {
+      "name": "Build-along execution and offline reproducibility",
+      "weight": 20,
+      "rating": 5,
+      "weighted_score": 20,
+      "evidence_ids": ["EV-BJ-L02-003", "EV-BJ-L02-004", "EV-BJ-L02-005"],
+      "feedback": "The builder-reported canonical command exited successfully, and an independent isolated fresh-state execution of that exact command also exited 0 under Python 3.12.9. Execution counts were 1-5 with zero cell errors, every visible check and FINAL PASS appeared, recorded output text matched, and the fresh JSONL was byte-identical to the persisted artifact."
+    },
+    {
+      "name": "Capstone contribution or completion",
+      "weight": 15,
+      "rating": 5,
+      "weighted_score": 15,
+      "evidence_ids": ["EV-BJ-L02-001", "EV-BJ-L02-006"],
+      "feedback": "EP-02 delivers the required intermediate capstone artifact: auditable binary judge predictions and reasons joined to the EP-01 references. It stops before metric computation while leaving exactly the records EP-03 needs to construct the confusion matrix and grader report."
+    },
+    {
+      "name": "Artifact compounding across lessons",
+      "weight": 10,
+      "rating": 5,
+      "weighted_score": 10,
+      "evidence_ids": ["EV-BJ-L02-004", "EV-BJ-L02-006"],
+      "feedback": "The notebook consumes build/lesson-01/eval_cases.jsonl directly rather than recreating it. Independent comparison confirms that all four ordered case_id/human_label pairs are unchanged in judge_predictions.jsonl, preserving the approved cumulative interface for EP-03."
+    },
+    {
+      "name": "Checkpoint and prerequisite alignment",
+      "weight": 10,
+      "rating": 5,
+      "weighted_score": 10,
+      "evidence_ids": ["EV-BJ-L02-007", "EV-BJ-L02-005"],
+      "feedback": "The four sections follow the approved rubric, cache, alignment, and disagreement sequence. The single CP-L02-03-A checkpoint resolves directly to executed CHECK 1-5 outputs covering the inherited input, label-free request, cache validation, ID alignment, disagreement display, persisted read-back, and final PASS."
+    },
+    {
+      "name": "Assignment shape and time compliance",
+      "weight": 10,
+      "rating": 5,
+      "weighted_score": 10,
+      "evidence_ids": ["EV-BJ-L02-008"],
+      "feedback": "The lesson contains four one-idea teaching sections of 324, 321, 323, and 362 words, exactly one 18-minute incremental build-along at the end, and one checkpoint. Delivery is text-only, Python 3.12 is specified, and the sole non-standard dependency is pinned."
+    },
+    {
+      "name": "Research and citation fidelity",
+      "weight": 10,
+      "rating": 5,
+      "weighted_score": 10,
+      "evidence_ids": ["EV-BJ-L02-009"],
+      "feedback": "Every cited CLM-L02 identifier exists in approved research revision 1.2 and is used within its recorded scope. The prose preserves the important limits: bounded rubrics do not make judges authoritative, JSON Schema does not provide cross-record coverage, and cached replay does not measure live-provider variance."
+    },
+    {
+      "name": "Pedagogical clarity at breaking points",
+      "weight": 5,
+      "rating": 5,
+      "weighted_score": 5,
+      "evidence_ids": ["EV-BJ-L02-007", "EV-BJ-L02-010"],
+      "feedback": "The lesson directly addresses the underspecified-judge breaking point with one concrete refund-window criterion, explicit exclusions, and a label-leakage warning. The intentional day-33 disagreement makes rubric ambiguity visible without prematurely scoring or overwriting either source of evidence."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "check_id": "CHK-BUILD-001",
+      "method": "Compare the builder-reported command/result with an independent isolated execution of: $env:JUPYTER_CONFIG_DIR = (Join-Path $PWD '.jupyter-config'); $env:IPYTHONDIR = (Join-Path $PWD '.ipython'); python -m jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=120 --output 'lesson-02.executed.ipynb' --output-dir 'output/lesson-02' 'build/lesson-02/lesson-02.ipynb'.",
+      "expected": "Every documented canonical execution command exits successfully.",
+      "actual": "Builder report: exit success with five visible checks plus FINAL PASS. Independent clean-tree run: exit code 0; nbconvert wrote output/lesson-02/lesson-02.executed.ipynb. A preliminary reviewer invocation without the command's two environment assignments exited 1 before notebook execution because the sandbox denied C:\\Users\\benga\\.jupyter; rerunning the exact canonical command resolved that reviewer-environment issue.",
+      "passed": true,
+      "severity": "critical"
+    },
+    {
+      "check_id": "CHK-BUILD-002",
+      "method": "Inspect declared paths after isolated execution and compare SHA-256 of the fresh and repository prediction artifacts.",
+      "expected": "Every declared output and persisted lesson artifact exists after execution.",
+      "actual": "The fresh execution produced both output/lesson-02/lesson-02.executed.ipynb and build/lesson-02/judge_predictions.jsonl. Fresh and recorded prediction files both had SHA-256 FB90A30BBCE884E801DA044DCD76FF9049DD6F8BE8239698BEAD70AA36AEC.",
+      "passed": true,
+      "severity": "critical"
+    },
+    {
+      "check_id": "CHK-BUILD-003",
+      "method": "Inspect EP-02 lesson claims and all recorded/fresh notebook output for grader-metric implementation.",
+      "expected": "Before the final lesson, the current increment prints every metric it claims to implement.",
+      "actual": "EP-02 claims and implements no aggregate grader metric. It prints aligned labels, the disagreement report, persistence confirmation, and FINAL PASS, while explicitly reserving TP, FP, FN, TN, precision, and recall for EP-03.",
+      "passed": true,
+      "severity": "informational"
+    },
+    {
+      "check_id": "CHK-BUILD-004",
+      "method": "Inspect the lesson, notebook source, produced artifact, and output for precision/recall calculations or claims.",
+      "expected": "Printed precision and recall match independent recomputation when those metrics are implemented.",
+      "actual": "Not applicable to EP-02 because it intentionally implements neither precision nor recall; independent metric verification becomes active in EP-03.",
+      "passed": true,
+      "severity": "informational"
+    },
+    {
+      "check_id": "CHK-BUILD-005",
+      "method": "Inspect every code cell for network/provider access and run the canonical notebook in an isolated tree containing only the EP-01 artifact and EP-02 local fixture.",
+      "expected": "The canonical review path completes from fixtures or cached responses with network unavailable and no paid API call.",
+      "actual": "Runtime code imports only json and pathlib, reads repository-contained JSONL files, and contains no network or provider call. The isolated cached-response replay exited 0 without an API key, paid call, or model weights.",
+      "passed": true,
+      "severity": "critical"
+    },
+    {
+      "check_id": "CHK-BUILD-006",
+      "method": "Inspect notebook metadata/header and build/lesson-02/requirements.txt, and record the independent runtime version.",
+      "expected": "Python 3.12 is specified and every non-standard dependency is pinned in requirements.txt.",
+      "actual": "Notebook metadata and header specify Python 3.12; requirements.txt states Python 3.12 and pins jupyter==1.1.1. The independent run reported Python 3.12.9; notebook runtime logic otherwise uses only the standard library.",
+      "passed": true,
+      "severity": "major"
+    },
+    {
+      "check_id": "CHK-BUILD-007",
+      "method": "Count build-along headings and inspect the five sequential editable code cells.",
+      "expected": "The completed lesson ends with exactly one incremental build-along.",
+      "actual": "Exactly one Build-along heading appears at the lesson end. Five code cells incrementally load inherited data, construct a label-free request, validate the cache, align predictions, display disagreements, and persist/read back the artifact.",
+      "passed": true,
+      "severity": "major"
+    },
+    {
+      "check_id": "CHK-BUILD-008",
+      "method": "Split course/lesson-02.md at its four approved teaching-section headings and count Unicode word tokens; inspect each section against plan user stories.",
+      "expected": "At most five teaching sections, each containing 300-500 words and teaching one idea.",
+      "actual": "Four teaching sections contain 324, 321, 323, and 362 words respectively and map one-to-one to US-L02-01 through US-L02-04. The separate end build-along is not counted as a teaching section.",
+      "passed": true,
+      "severity": "major"
+    },
+    {
+      "check_id": "CHK-BUILD-009",
+      "method": "Check whether a complete submission archive exists at this pre-packaging EP-02 stage.",
+      "expected": "Before packaging, report this check as not applicable rather than passing it without archive evidence.",
+      "actual": "Not applicable: there is no complete submission archive to measure during this EP-02 builder gate.",
+      "passed": false,
+      "severity": "informational"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "EV-BJ-L02-001",
+      "type": "artifact",
+      "target": "build/lesson-02/lesson-02.ipynb; build/lesson-02/cached_judge_responses.jsonl; build/lesson-02/judge_predictions.jsonl",
+      "locator": "code cells 1-5 and all four JSONL records",
+      "observation": "The implementation validates the local fixture before output, maps only the two allowed verdicts, joins by case_id, preserves the human reference fields, exposes reasons, and writes four well-shaped predictions."
+    },
+    {
+      "evidence_id": "EV-BJ-L02-002",
+      "type": "test_output",
+      "target": "build/lesson-02/judge_predictions.jsonl",
+      "locator": "independent JSONL parse and field/domain inspection",
+      "observation": "Four records have exactly case_id, human_label, judge_label, and judge_reason; all labels are binary, all reasons are non-empty, and refund-window-003 is the sole intentional disagreement."
+    },
+    {
+      "evidence_id": "EV-BJ-L02-003",
+      "type": "test_output",
+      "target": "build/lesson-02/lesson-02.ipynb",
+      "locator": "independent isolated invocation of the exact canonical nbconvert command",
+      "observation": "Exit code 0 under Python 3.12.9; execution counts 1,2,3,4,5; zero error outputs; CHECK 1-5 and FINAL PASS printed. Nbconvert emitted only a non-fatal Windows ZMQ event-loop warning."
+    },
+    {
+      "evidence_id": "EV-BJ-L02-004",
+      "type": "test_output",
+      "target": "isolated replay artifact versus build/lesson-02/judge_predictions.jsonl",
+      "locator": "SHA-256 comparison and ordered (case_id, human_label) comparison",
+      "observation": "Fresh and recorded prediction files were byte-identical at SHA-256 FB90A30BBCE884E801DA044DCD76FF9049DD6F8BE8239698BEAD70AA36AEC; their ordered inherited ID/label pairs exactly matched build/lesson-01/eval_cases.jsonl."
+    },
+    {
+      "evidence_id": "EV-BJ-L02-005",
+      "type": "test_output",
+      "target": "output/lesson-02/lesson-02.executed.ipynb and isolated executed notebook",
+      "locator": "all code-cell outputs",
+      "observation": "Recorded and independently produced output text matched exactly: four cases loaded, label semantics printed, human_label excluded, cache contract and exact coverage passed, stable alignment passed, one disagreement printed, four predictions reloaded, and FINAL PASS printed."
+    },
+    {
+      "evidence_id": "EV-BJ-L02-006",
+      "type": "artifact",
+      "target": "CONTEXT.md revision 8; lesson-02 plan revision 1.1; build/lesson-02/judge_predictions.jsonl",
+      "locator": "cross-epic artifact interfaces, build_along.output_artifact, capstone_trace, and all prediction rows",
+      "observation": "The EP-01 to EP-02 interface compounds exactly as approved, and EP-02 provides the four-field input EP-03 requires without computing EP-03 metrics early."
+    },
+    {
+      "evidence_id": "EV-BJ-L02-007",
+      "type": "artifact",
+      "target": "course/lesson-02.md; lesson-02 plan revision 1.1",
+      "locator": "four teaching sections, CP-L02-03-A checkpoint, and Build-along",
+      "observation": "Instruction follows the approved dependency order and translates the checkpoint into observable fresh-run conditions that are all present in the notebook outputs."
+    },
+    {
+      "evidence_id": "EV-BJ-L02-008",
+      "type": "constraint",
+      "target": "course/lesson-02.md; build/lesson-02/lesson-02.ipynb; build/lesson-02/requirements.txt",
+      "locator": "section token count, timing labels, build-along heading, notebook metadata, and requirements lines 1-2",
+      "observation": "Teaching-section counts are 324/321/323/362; the sole build-along is estimated at 18 minutes; Python 3.12 is specified; jupyter==1.1.1 is pinned; no prohibited media or assessment format appears."
+    },
+    {
+      "evidence_id": "EV-BJ-L02-009",
+      "type": "source",
+      "target": "course/lesson-02.md; agent/evals-course-factory/output/lesson-02/searcher/sources.json revision 1.2",
+      "locator": "CLM-L02-RUBRIC-001, CLM-L02-BIAS-001, CLM-L02-CONTRACT-001, CLM-L02-ALIGN-001, and CLM-L02-CACHE-001",
+      "observation": "All lesson claim IDs resolve to approved records and sources; each claim's inference status, scope, and limitations are reflected in the lesson rather than promoted into a universal guarantee."
+    },
+    {
+      "evidence_id": "EV-BJ-L02-010",
+      "type": "artifact",
+      "target": "course/lesson-02.md",
+      "locator": "Bound the judge and Inspect disagreements before scoring sections",
+      "observation": "Concrete day-45/day-12 contrasts teach the bounded criterion; the day-33 disagreement exposes an implied-approval ambiguity and instructs learners to inspect both references instead of forcing agreement."
+    },
+    {
+      "evidence_id": "EV-BJ-L02-011",
+      "type": "calculation",
+      "target": "review aspects and penalties",
+      "locator": "20x5/5 + 20x5/5 + 15x5/5 + 10x5/5 + 10x5/5 + 10x5/5 + 10x5/5 + 5x5/5 - 0",
+      "observation": "Weighted scores total 100; no observable builder workflow behavior supports a fixed behavioral penalty."
+    }
+  ],
+  "strengths": [
+    "[EV-BJ-L02-003] The exact canonical notebook command independently succeeds from an isolated fresh state with sequential execution and every promised visible check.",
+    "[EV-BJ-L02-004] The newly produced artifact is byte-identical to the recorded JSONL and preserves every inherited case_id/human_label pair.",
+    "[EV-BJ-L02-009] The lesson keeps sourced judge limitations and course-engineering invariants distinct while remaining within the approved EP-02 boundary."
+  ],
+  "defects": [],
+  "qualitative_feedback": "Approved. Builder revision 1.0 satisfies every applicable EP-02 hard gate: exact-command fresh-state execution succeeds offline, visible checks and recorded outputs agree, the persisted prediction artifact is deterministic, and the EP-01 interface compounds cleanly into an EP-03-ready handoff without premature metric computation. The weighted calculation is 100 points minus zero behavioral penalties, for 100 total. CHK-BUILD-009 is correctly recorded as not applicable with passed=false because no archive exists yet."
+}
