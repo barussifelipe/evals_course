@@ -1,0 +1,99 @@
+{
+  "epic_id": "EP-02",
+  "context_revision": 5,
+  "plan_revision": "1.1",
+  "title": "Turn a rubric into judge predictions",
+  "purpose": "Enable a learner to convert the explicit regression criterion and labeled cases from EP-01 into auditable binary judge predictions using a bounded rubric, cached offline responses, strict parsing, stable case alignment, and disagreement inspection.",
+  "prerequisites": [
+    "The learner can read and edit basic Python and run Jupyter notebook cells.",
+    "The learner understands from EP-01 that human_label = 1 means the defined regression is present and human_label = 0 means it is absent.",
+    "build/lesson-01/eval_cases.jsonl exists and contains the approved case_id, input, candidate_output, and human_label fields."
+  ],
+  "user_stories": [
+    {
+      "user_story_id": "US-L02-01",
+      "title": "Bound the judge with one rubric",
+      "statement": "As an AI feature owner, I want a rubric that translates the existing regression criterion into explicit verdict rules so that the judge evaluates the intended failure instead of unrelated output quality.",
+      "one_idea": "An LLM judge needs a bounded rubric with the decision criterion, positive-class mapping, permitted evidence, and exclusions stated explicitly.",
+      "checkpoints": [],
+      "acceptance_criteria": [
+        "The rubric preserves the EP-01 decision boundary and maps regression present to judge_label 1 and regression absent to judge_label 0.",
+        "The rubric tells the judge to use only the stored input and candidate_output and to ignore unrelated qualities such as tone or polish.",
+        "The section distinguishes the human label used as reference from the judge prediction and prevents human_label from being included in the judge request."
+      ],
+      "estimated_minutes": 2.5,
+      "depends_on": []
+    },
+    {
+      "user_story_id": "US-L02-02",
+      "title": "Make responses replayable",
+      "statement": "As an eval maintainer, I want each judge response to follow a small response contract and be cached by case ID so that the evaluation can be rerun offline and audited without another paid call.",
+      "one_idea": "A versioned rubric plus a strict, cached response contract turns an otherwise variable model interaction into a reproducible evaluation input.",
+      "checkpoints": [],
+      "acceptance_criteria": [
+        "Each cached response is keyed by a stable case_id and contains exactly one binary verdict plus a brief evidence-based reason.",
+        "The lesson explains that cached responses demonstrate the grading pipeline but do not measure live-provider variance.",
+        "The offline path requires no API key, network access, model weights, or paid call."
+      ],
+      "estimated_minutes": 2.5,
+      "depends_on": ["US-L02-01"]
+    },
+    {
+      "user_story_id": "US-L02-03",
+      "title": "Parse and align predictions",
+      "statement": "As an eval maintainer, I want strict parsing and one-to-one case alignment so that malformed, missing, duplicate, or unknown responses fail before they become grader inputs.",
+      "one_idea": "Judge output becomes usable evaluation data only after its verdict is validated and joined to ground truth by stable identity rather than row order.",
+      "checkpoints": [],
+      "acceptance_criteria": [
+        "Parsing accepts only the declared binary verdict values and rejects missing or malformed verdicts with an actionable case_id-specific error.",
+        "Alignment proves exactly one response for every evaluation case, no duplicate case IDs, and no unknown or missing IDs.",
+        "The produced prediction records preserve case_id and human_label unchanged and add judge_label and judge_reason without computing aggregate metrics."
+      ],
+      "estimated_minutes": 2.5,
+      "depends_on": ["US-L02-02"]
+    },
+    {
+      "user_story_id": "US-L02-04",
+      "title": "Inspect disagreements before scoring",
+      "statement": "As an evaluator, I want to compare each judge prediction with the human label so that disagreements remain inspectable evidence rather than disappearing inside an aggregate score.",
+      "one_idea": "A human-judge disagreement is a review target, not automatic proof that either side is correct.",
+      "checkpoints": [
+        {
+          "checkpoint_id": "CP-L02-03-A",
+          "capability": "Run an offline LLM-as-judge rubric over the evaluation set and inspect disagreements against human labels.",
+          "observable_check": "After completing US-L02-01 through US-L02-04, a fresh-kernel notebook run loads all EP-01 cases, replays one cached response per case, validates and aligns every prediction by case_id, prints a disagreement table containing case_id, human_label, judge_label, and judge_reason, writes judge_predictions.jsonl, and ends with PASS."
+        }
+      ],
+      "acceptance_criteria": [
+        "The learner can identify each disagreement by case_id and inspect both labels plus the judge's stated reason.",
+        "The section warns against silently treating the judge as ground truth or changing human labels to improve apparent agreement.",
+        "The lesson stops at record-level inspection and explicitly defers confusion-matrix counts, precision, and recall to EP-03."
+      ],
+      "estimated_minutes": 2.5,
+      "depends_on": ["US-L02-03"]
+    }
+  ],
+  "build_along": {
+    "estimated_minutes": 18,
+    "input_artifact": "build/lesson-01/eval_cases.jsonl",
+    "output_artifact": "build/lesson-02/judge_predictions.jsonl",
+    "visible_checks": [
+      "Load eval_cases.jsonl and print the case count plus the invariant label mapping inherited from EP-01.",
+      "Render the bounded rubric for one case and prove that the judge request contains input and candidate_output but not human_label.",
+      "Load cached judge responses and validate allowed verdicts, non-empty reasons, unique case IDs, and exact case-ID coverage; print actionable errors or PASS.",
+      "Convert verdicts to binary judge_label values, align them to cases by case_id, and prove that case_id and human_label are unchanged.",
+      "Print the disagreement rows with case_id, human_label, judge_label, and judge_reason; write and reload judge_predictions.jsonl, compare it with the in-memory records, and print the output path plus a final PASS."
+    ],
+    "offline_replay": "The canonical Jupyter notebook uses Python 3.12 and repository-contained eval cases plus cached judge responses. From a fresh kernel it renders requests, parses cached responses, validates exact case-ID coverage, writes and reloads judge_predictions.jsonl, and displays disagreements without network access, API keys, model weights, or paid calls. The executed notebook and actual output are recorded under output/lesson-02/."
+  },
+  "capstone_trace": [
+    "CONTEXT.md breaking point 2 identifies the learner failure addressed by this epic: an authoritative-sounding model judge can apply an underspecified rubric inconsistently or import irrelevant preferences. US-L02-01 bounds that rubric, and CP-L02-03-A makes the complete response observable through validated offline predictions and disagreement inspection.",
+    "CP-L02-03-A supplies the capstone's validated judge-prediction layer: each EP-01 case receives one parsed binary prediction and an inspectable reason through offline replay.",
+    "The bounded rubric preserves the course invariant that label 1 means regression present, so EP-03 can compare judge_label with human_label without reversing the positive class.",
+    "build/lesson-02/judge_predictions.jsonl is useful alone as a case-level disagreement report and is the required EP-03 prediction input; each record contains case_id, unchanged human_label, judge_label, and judge_reason.",
+    "Exact ID coverage, uniqueness, strict verdict parsing, invariant checks, and round-trip persistence prevent EP-03 from scoring reordered, missing, duplicated, malformed, or semantically reversed predictions.",
+    "This lesson satisfies the second part of the capstone contract. EP-03 must independently join eval_cases.jsonl and judge_predictions.jsonl by case_id, validate human-label agreement across the artifacts, compute TP/FP/FN/TN, print precision and recall with zero-division handling, persist grader_report.json, and prove known expected values.",
+    "Searcher brief: research only EP-02 claims needed to define bounded rubric design, distinguish reference labels from judge predictions, support structured-output validation and stable-ID alignment, characterize limitations of cached offline replay, and interpret disagreement as a review target; write only agent/evals-course-factory/output/lesson-02/searcher/sources.json. Do not research or draft EP-03 formulas, metrics, lesson prose, notebook code, or live-provider integrations.",
+    "Builder brief: consume only this approved plan, approved EP-02 research, and build/lesson-01/eval_cases.jsonl; write exactly course/lesson-02.md plus the notebook, cached-response fixture, and persisted learner artifact under build/lesson-02/, with actual executed results only under output/lesson-02/. Preserve four text-only, one-idea sections of 300-500 words and about 2-3 minutes each, followed by exactly one incremental build-along of at most 20 minutes. Use an editable Jupyter notebook that runs offline top-to-bottom from a fresh kernel on Python 3.12, prints every declared visible check, preserves case_id and human_label semantics, and persists judge_predictions.jsonl. Do not use Mermaid, raster images, quizzes, flashcards, video, audio, paid calls, model weights, live-provider integration, or EP-03 metric computation."
+  ]
+}
