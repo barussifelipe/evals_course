@@ -1,0 +1,291 @@
+{
+  "review_id": "REV-ORCH-L01-01",
+  "judge": "orchestrator-judge",
+  "judgee": "orchestrator",
+  "artifact_revision": "1.0",
+  "context_revision": 2,
+  "verdict": "targeted_revision",
+  "total_score": 84,
+  "penalties": [],
+  "penalty_total": 0,
+  "penalty_evidence": [],
+  "aspects": [
+    {
+      "name": "Assignment constraint coverage and traceability",
+      "weight": 20,
+      "rating": 4,
+      "weighted_score": 16,
+      "evidence_ids": [
+        "EV-OJ-L01-001",
+        "EV-OJ-L01-005",
+        "EV-OJ-L01-006",
+        "EV-OJ-L01-011"
+      ],
+      "feedback": "The plan stays within EP-01, uses four short one-idea sections, ends with one 18-minute cumulative build-along, and traces its artifact to the assigned capstone. It does not yet carry several builder-facing assignment constraints into an explicit implementation brief, so traceability is strong but incomplete."
+    },
+    {
+      "name": "Breaking points and observable checkpoints",
+      "weight": 20,
+      "rating": 4,
+      "weighted_score": 16,
+      "evidence_ids": [
+        "EV-OJ-L01-002",
+        "EV-OJ-L01-003",
+        "EV-OJ-L01-004"
+      ],
+      "feedback": "Context revision 2 names three breaking points before generation, and EP-01 has one specific, visible checkpoint. The checkpoint is assigned one section before the plan teaches the complete deterministic validation behavior it requires, weakening the checkpoint's placement."
+    },
+    {
+      "name": "Backward design from the capstone",
+      "weight": 20,
+      "rating": 5,
+      "weighted_score": 20,
+      "evidence_ids": [
+        "EV-OJ-L01-004",
+        "EV-OJ-L01-006",
+        "EV-OJ-L01-007"
+      ],
+      "feedback": "The checkpoint and eval_cases.jsonl are explicitly derived from the final grader's need for stable IDs, binary ground truth, and invariant positive-class semantics, while later confusion-matrix and metric work is correctly deferred."
+    },
+    {
+      "name": "Prerequisite and artifact dependency correctness",
+      "weight": 15,
+      "rating": 3,
+      "weighted_score": 9,
+      "evidence_ids": [
+        "EV-OJ-L01-003",
+        "EV-OJ-L01-004",
+        "EV-OJ-L01-007"
+      ],
+      "feedback": "The cross-lesson artifact chain and stable-ID contract are correct, and the lesson has no external input dependency. Within the lesson, however, CP-L01-03-A requires schema and class-count validation in US-L01-03 even though US-L01-04 is where deterministic validation is taught."
+    },
+    {
+      "name": "Task briefs and agent interface clarity",
+      "weight": 10,
+      "rating": 4,
+      "weighted_score": 8,
+      "evidence_ids": [
+        "EV-OJ-L01-003",
+        "EV-OJ-L01-005",
+        "EV-OJ-L01-007",
+        "EV-OJ-L01-010"
+      ],
+      "feedback": "User stories, acceptance criteria, build checks, output path, and the EP-02 interface are concrete. The plan lacks an explicit bounded handoff for the searcher and builder, leaving some assignment-level format constraints and owned deliverables implicit."
+    },
+    {
+      "name": "Offline and reproducibility strategy",
+      "weight": 10,
+      "rating": 5,
+      "weighted_score": 10,
+      "evidence_ids": [
+        "EV-OJ-L01-005",
+        "EV-OJ-L01-007"
+      ],
+      "feedback": "The plan specifies a fresh-kernel, network-free notebook flow that creates, validates, persists, reloads, compares, and visibly reports the artifact, with actual execution output routed separately."
+    },
+    {
+      "name": "Context consistency and change tracking",
+      "weight": 5,
+      "rating": 5,
+      "weighted_score": 5,
+      "evidence_ids": [
+        "EV-OJ-L01-002",
+        "EV-OJ-L01-008"
+      ],
+      "feedback": "The plan identifies revision 1.0 and context revision 2, matches the approved EP-01 boundary and terminology, and does not claim that later phases or epics are complete."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "check_id": "CHK-ORCH-001",
+      "method": "Equivalent PowerShell structural check over CONTEXT.md and plan.json; the preliminary Python jsonschema command was not run because importing jsonschema failed.",
+      "expected": "The approved course contains two or three lessons and the current plan covers no more than one lesson.",
+      "actual": "Context revision 2 contains three approved course epics, and plan revision 1.0 covers only EP-01.",
+      "passed": true,
+      "severity": "critical"
+    },
+    {
+      "check_id": "CHK-ORCH-002",
+      "method": "Equivalent PowerShell structural check parsed plan.json and counted user_stories.",
+      "expected": "The current lesson contains one to five sections.",
+      "actual": "The plan contains four user stories/sections.",
+      "passed": true,
+      "severity": "major"
+    },
+    {
+      "check_id": "CHK-ORCH-003",
+      "method": "Equivalent PowerShell structural check inspected build_along declarations and capstone_trace.",
+      "expected": "The lesson declares its input artifact, output artifact, offline replay method, and next-lesson interface.",
+      "actual": "The first lesson explicitly declares input_artifact as null, output_artifact as build/lesson-01/eval_cases.jsonl, a network-free offline method, and the artifact's EP-02 interface.",
+      "passed": true,
+      "severity": "critical"
+    },
+    {
+      "check_id": "CHK-ORCH-004",
+      "method": "Equivalent PowerShell structural check counted checkpoints nested in user_stories.",
+      "expected": "The lesson contains one to three observable checkpoints, each assigned within a user story.",
+      "actual": "One checkpoint, CP-L01-03-A, is embedded in US-L01-03 and declares a visible fresh-kernel PASS condition.",
+      "passed": true,
+      "severity": "critical"
+    },
+    {
+      "check_id": "CHK-ORCH-005",
+      "method": "Equivalent PowerShell structural check inspected the single build_along object and estimated_minutes.",
+      "expected": "Exactly one end-of-lesson build-along is planned at no more than 20 learner minutes.",
+      "actual": "The plan contains one build_along estimated at 18 minutes.",
+      "passed": true,
+      "severity": "critical"
+    },
+    {
+      "check_id": "CHK-ORCH-006",
+      "method": "Equivalent PowerShell structural check inspected capstone_trace for the checkpoint and output artifact.",
+      "expected": "Every lesson checkpoint and output artifact traces to an explicit capstone acceptance criterion.",
+      "actual": "CP-L01-03-A and eval_cases.jsonl explicitly trace to stable ground-truth inputs for the precision/recall capstone.",
+      "passed": true,
+      "severity": "critical"
+    },
+    {
+      "check_id": "CHK-REVIEW-VALIDATOR",
+      "method": "Attempt to import the Python jsonschema package before running strict schema validation.",
+      "expected": "jsonschema is importable and the strict validation command can run.",
+      "actual": "The command was not run because import failed with ModuleNotFoundError: jsonschema; an equivalent PowerShell structural check was used for CHK-ORCH-001 through CHK-ORCH-006.",
+      "passed": false,
+      "severity": "informational"
+    },
+    {
+      "check_id": "CHK-REVIEW-SCHEMA",
+      "method": "Static inspection of agent/evals-course-factory/schemas/review.schema.json.",
+      "expected": "Every required review property is defined in properties and admitted when additionalProperties is false.",
+      "actual": "The schema requires verdict but defines verExpladict instead; therefore any semantically correct review containing verdict is rejected as an additional property, while omitting verdict fails the required list.",
+      "passed": false,
+      "severity": "informational"
+    },
+    {
+      "check_id": "CHK-GIT-001",
+      "method": "git diff --check.",
+      "expected": "No whitespace errors in tracked diffs.",
+      "actual": "No whitespace errors were emitted. Git warned that the user-global ignore file was inaccessible, and the relevant files are untracked, so this command does not validate their whitespace.",
+      "passed": true,
+      "severity": "informational"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "EV-OJ-L01-001",
+      "type": "constraint",
+      "target": "ref/instructions.md",
+      "locator": "How to build it; Shape; Rules; How we run your submission",
+      "observation": "The assignment requires backward design from at least three breaking points, one to three checkpoints per lesson, at most five 300-500-word sections, one incremental build-along under 20 minutes, offline replay, and cumulative artifacts leading to printed precision and recall."
+    },
+    {
+      "evidence_id": "EV-OJ-L01-002",
+      "type": "artifact",
+      "target": "CONTEXT.md",
+      "locator": "Context revision 2; Breaking points; Course checkpoints; Agile hierarchy and epic boundaries",
+      "observation": "Revision 2 records three breaking points, approves three epics, assigns CP-L01-03-A to EP-01, and bounds the current run to EP-01."
+    },
+    {
+      "evidence_id": "EV-OJ-L01-003",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-01/orchestrator/plan.json",
+      "locator": "$.user_stories[0:4]",
+      "observation": "Four user stories form an explicit dependency chain from defining the regression through label semantics and stable records to deterministic validation."
+    },
+    {
+      "evidence_id": "EV-OJ-L01-004",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-01/orchestrator/plan.json",
+      "locator": "$.user_stories[2].checkpoints[0]",
+      "observation": "CP-L01-03-A requires the learner to create the dataset and validate its schema and class counts, with a visible fresh-kernel PASS result."
+    },
+    {
+      "evidence_id": "EV-OJ-L01-005",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-01/orchestrator/plan.json",
+      "locator": "$.build_along",
+      "observation": "The single 18-minute build-along incrementally prints label semantics, previews records, validates data, checks both classes, writes and reloads JSONL, and prints a final PASS."
+    },
+    {
+      "evidence_id": "EV-OJ-L01-006",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-01/orchestrator/plan.json",
+      "locator": "$.capstone_trace",
+      "observation": "The trace explains how the checkpoint and artifact supply stable human ground truth for later judge predictions and precision/recall, and explicitly defers later capstone components."
+    },
+    {
+      "evidence_id": "EV-OJ-L01-007",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-01/orchestrator/plan.json",
+      "locator": "$.build_along.input_artifact; $.build_along.output_artifact; $.build_along.offline_replay; $.capstone_trace[2]",
+      "observation": "EP-01 correctly has no input artifact, produces eval_cases.jsonl offline, and defines that artifact as EP-02's required input with stable IDs and labels."
+    },
+    {
+      "evidence_id": "EV-OJ-L01-008",
+      "type": "artifact",
+      "target": "CONTEXT.md and agent/evals-course-factory/output/lesson-01/orchestrator/plan.json",
+      "locator": "CONTEXT.md Current epic and Next authorized action; plan $.context_revision and $.plan_revision",
+      "observation": "Both artifacts identify context revision 2 and plan revision 1.0, and the plan remains inside the authorized EP-01 planning phase."
+    },
+    {
+      "evidence_id": "EV-OJ-L01-009",
+      "type": "constraint",
+      "target": "agent/evals-course-factory/schemas/review.schema.json",
+      "locator": "$.required[5]; $.properties.verExpladict; $.additionalProperties",
+      "observation": "The schema requires verdict but misspells its property definition as verExpladict while setting additionalProperties to false, making strict conformance impossible."
+    },
+    {
+      "evidence_id": "EV-OJ-L01-010",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-01/orchestrator/plan.json",
+      "locator": "top-level object and $.user_stories",
+      "observation": "The plan provides learner-story acceptance criteria but no explicit searcher or builder task brief naming their bounded deliverables, ownership paths, and non-goals."
+    },
+    {
+      "evidence_id": "EV-OJ-L01-011",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-01/orchestrator/plan.json",
+      "locator": "$.user_stories; $.build_along",
+      "observation": "The plan encodes section timing and one-idea scope but does not explicitly pass through the 300-500-word section bound, text-only/no-assessment restrictions, or AI-generation provenance requirement."
+    },
+    {
+      "evidence_id": "EV-OJ-L01-012",
+      "type": "calculation",
+      "target": "agent/evals-course-factory/output/lesson-01/orchestrator/reviews/review-01.json",
+      "locator": "$.aspects; $.penalty_total; $.total_score",
+      "observation": "Weighted aspect scores sum to 84, no behavioral penalties are evidenced, and the fixed gate therefore yields targeted_revision."
+    }
+  ],
+  "strengths": [
+    "EV-OJ-L01-005 and EV-OJ-L01-007: the plan defines a small, cumulative, offline artifact with visible validation and round-trip checks.",
+    "EV-OJ-L01-006: backward traceability is unusually explicit about both what EP-01 contributes and what later epics must add.",
+    "EV-OJ-L01-002 and EV-OJ-L01-008: scope and revision provenance match the approved context without leaking into later lesson generation."
+  ],
+  "defects": [
+    {
+      "defect_id": "DEF-OJ-L01-001",
+      "severity": "major",
+      "target": "agent/evals-course-factory/output/lesson-01/orchestrator/plan.json",
+      "evidence_ids": [
+        "EV-OJ-L01-003",
+        "EV-OJ-L01-004"
+      ],
+      "problem": "CP-L01-03-A is embedded in US-L01-03 and requires schema and class-count validation before US-L01-04 teaches the deterministic validation rules and their interpretation.",
+      "consequence": "The learner is checkpointed on a capability that the declared section sequence has not fully taught, so the checkpoint cannot reliably demonstrate the intended breaking-point recovery at its current position.",
+      "acceptance_condition": "Revise the plan so CP-L01-03-A occurs only after all validation behavior in its capability and observable check has been taught: either move the checkpoint to US-L01-04 and update dependencies/acceptance criteria, or move the complete required validation instruction into US-L01-03 and narrow US-L01-04 so no checkpoint prerequisite remains downstream."
+    },
+    {
+      "defect_id": "DEF-OJ-L01-002",
+      "severity": "minor",
+      "target": "agent/evals-course-factory/output/lesson-01/orchestrator/plan.json",
+      "evidence_ids": [
+        "EV-OJ-L01-001",
+        "EV-OJ-L01-010",
+        "EV-OJ-L01-011"
+      ],
+      "problem": "The plan does not provide explicit bounded searcher and builder handoffs, and several assignment constraints that matter during lesson generation remain implicit.",
+      "consequence": "A downstream agent can satisfy the user stories while still missing required section length, text-only/no-assessment boundaries, AI-generation provenance, or owned output locations.",
+      "acceptance_condition": "Add concise searcher and builder briefs that name their EP-01-only deliverables, ownership paths, inputs, non-goals, and acceptance checks; the builder brief must explicitly preserve four 2-3-minute, 300-500-word, one-idea text sections, one incremental offline notebook build-along, visible checks, and the assignment's prohibited formats."
+    }
+  ],
+  "qualitative_feedback": "Targeted revision. The EP-01 boundary, cumulative artifact, offline replay, and precision/recall trace are sound, and all six approved orchestrator checks pass. Fix the checkpoint's instructional order and make the two downstream agent handoffs explicit; no wider redesign is needed. Score: 84 = 16 + 16 + 20 + 9 + 8 + 10 + 5, with zero penalties. Strict review-schema conformance cannot currently be demonstrated: jsonschema is unavailable in the environment, and static inspection confirms the schema itself is contradictory because it requires verdict but defines verExpladict while rejecting additional properties. This review keeps the semantically required verdict field as the closest correct representation; the schema should rename verExpladict to verdict before strict validation."
+}
