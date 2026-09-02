@@ -1,0 +1,177 @@
+{
+  "review_id": "REV-SEARCH-L02-03",
+  "judge": "searcher-judge",
+  "judgee": "searcher",
+  "artifact_revision": "1.2",
+  "context_revision": 7,
+  "verdict": "approved",
+  "total_score": 98,
+  "penalties": [],
+  "penalty_total": 0,
+  "penalty_evidence": [],
+  "aspects": [
+    {
+      "name": "Primary-source and paper quality",
+      "weight": 20,
+      "rating": 5,
+      "weighted_score": 20,
+      "evidence_ids": ["EV-SJ-L02-301", "EV-SJ-L02-302"],
+      "feedback": "The research uses an EMNLP paper, the original MT-Bench paper, and separately resolvable official JSON Schema Core and Validation specifications."
+    },
+    {
+      "name": "Claim-to-source entailment",
+      "weight": 25,
+      "rating": 5,
+      "weighted_score": 25,
+      "evidence_ids": ["EV-SJ-L02-303", "EV-SJ-L02-304", "EV-SJ-L02-305"],
+      "feedback": "The research papers support criteria/form-based judging and documented judge limitations. The two JSON Schema records now directly support extra-property, required-field, and type assertions; course-specific alignment and cache conclusions remain explicitly marked as inferences."
+    },
+    {
+      "name": "Coverage of planned concepts and failure modes",
+      "weight": 15,
+      "rating": 5,
+      "weighted_score": 15,
+      "evidence_ids": ["EV-SJ-L02-306"],
+      "feedback": "All four planned stories are covered, including bounded criteria, strict response contracts, ID-based alignment, offline replay limits, and disagreement inspection."
+    },
+    {
+      "name": "Citation completeness and resolvability",
+      "weight": 15,
+      "rating": 5,
+      "weighted_score": 15,
+      "evidence_ids": ["EV-SJ-L02-301", "EV-SJ-L02-305"],
+      "feedback": "All source URLs resolve, every claim has source support, and CLM-L02-CONTRACT-001 now names both separately resolvable specifications with correct locators."
+    },
+    {
+      "name": "Technical accuracy and appropriate qualifications",
+      "weight": 15,
+      "rating": 5,
+      "weighted_score": 15,
+      "evidence_ids": ["EV-SJ-L02-303", "EV-SJ-L02-304", "EV-SJ-L02-307"],
+      "feedback": "The claims accurately retain the papers' task and model boundaries, distinguish an auditable proxy from ground truth, and correctly limit JSON Schema to field-level validation rather than cross-record coverage."
+    },
+    {
+      "name": "Seminal/recent source balance",
+      "weight": 5,
+      "rating": 3,
+      "weighted_score": 3,
+      "evidence_ids": ["EV-SJ-L02-302"],
+      "feedback": "The 2023 LLM-as-judge papers are directly relevant and recent, but no older foundational evaluation source is included."
+    },
+    {
+      "name": "Builder-ready structured handoff",
+      "weight": 5,
+      "rating": 5,
+      "weighted_score": 5,
+      "evidence_ids": ["EV-SJ-L02-306", "EV-SJ-L02-307"],
+      "feedback": "The schema-valid JSON separates source records, scoped claims, limitations, inference flags, story coverage, and explicit evidence gaps for direct builder use."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "check_id": "CHK-SEARCH-001",
+      "method": "Supplied JSON parse/schema-validation result plus direct inspection of claim source_ids and source URLs.",
+      "expected": "Every material claim has at least one resolvable source.",
+      "actual": "5/5 material claims have at least one linked resolvable source (100%).",
+      "passed": true,
+      "severity": "major"
+    },
+    {
+      "check_id": "CHK-SEARCH-002",
+      "method": "Direct review of the cited ACL, arXiv, JSON Schema Core, and JSON Schema Validation publications.",
+      "expected": "At least 80% of central claims have primary or authoritative support.",
+      "actual": "5/5 central claims have primary or authoritative support (100%).",
+      "passed": true,
+      "severity": "critical"
+    },
+    {
+      "check_id": "CHK-SEARCH-003",
+      "method": "Compare source title, authors, year, and URL across source records.",
+      "expected": "Duplicate records are identified and the duplicate rate is reported.",
+      "actual": "0/4 duplicate source records (0%).",
+      "passed": true,
+      "severity": "minor"
+    },
+    {
+      "check_id": "CHK-SEARCH-004",
+      "method": "Inspect each source record for title, authors, year, source_type, URL, and authority_note.",
+      "expected": "Required title, authors, year, source type, URL, and authority note are present.",
+      "actual": "0 sources have missing required metadata.",
+      "passed": true,
+      "severity": "major"
+    },
+    {
+      "check_id": "CHK-SEARCH-005",
+      "method": "Compare the four approved plan user stories and their acceptance criteria with claims and coverage entries.",
+      "expected": "Approved plan concepts have adequate evidence or an explicit, correctly bounded evidence gap.",
+      "actual": "4/4 approved user stories are covered (100%); cache replay and cross-record alignment are correctly bounded as engineering inferences.",
+      "passed": true,
+      "severity": "major"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "EV-SJ-L02-301",
+      "type": "source",
+      "target": "SRC-L02-GEVAL; SRC-L02-MTBENCH; SRC-L02-JSONSCHEMA; SRC-L02-JSONSCHEMA-VALIDATION",
+      "locator": "source URL fields",
+      "observation": "Direct review resolved all four source URLs: ACL hosts G-Eval, arXiv hosts MT-Bench, and json-schema.org hosts the separate Draft 2020-12 Core and Validation specifications."
+    },
+    {
+      "evidence_id": "EV-SJ-L02-302",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-02/searcher/sources.json",
+      "locator": "sources",
+      "observation": "The handoff contains two relevant 2023 LLM-as-judge papers and two official structural-validation source records; it does not include an older foundational evaluation source."
+    },
+    {
+      "evidence_id": "EV-SJ-L02-303",
+      "type": "source",
+      "target": "SRC-L02-GEVAL; SRC-L02-MTBENCH",
+      "locator": "G-Eval ACL abstract; MT-Bench arXiv abstract",
+      "observation": "G-Eval describes task introduction, evaluation criteria, and form-filling evaluation; MT-Bench documents position, verbosity, and self-enhancement biases alongside human-preference agreement."
+    },
+    {
+      "evidence_id": "EV-SJ-L02-304",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-02/searcher/sources.json",
+      "locator": "CLM-L02-ALIGN-001; CLM-L02-CACHE-001",
+      "observation": "The research explicitly labels stable-ID exact coverage and cached-replay limitations as pipeline inferences rather than claims imposed by the cited sources."
+    },
+    {
+      "evidence_id": "EV-SJ-L02-305",
+      "type": "source",
+      "target": "SRC-L02-JSONSCHEMA; SRC-L02-JSONSCHEMA-VALIDATION; CLM-L02-CONTRACT-001",
+      "locator": "JSON Schema Draft 2020-12 Core §10.3.2.3; Validation §§6.1.1 and 6.5.3",
+      "observation": "Direct review confirms Core §10.3.2.3 defines additionalProperties for names not matched by properties or patternProperties; Validation §6.1.1 defines type validation and §6.5.3 defines required-property validation."
+    },
+    {
+      "evidence_id": "EV-SJ-L02-306",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-02/searcher/sources.json",
+      "locator": "claims; coverage; evidence_gaps",
+      "observation": "Five scoped claims map to all four EP-02 user stories, and the evidence gaps exclude EP-03 metric work while preserving stated pipeline limitations."
+    },
+    {
+      "evidence_id": "EV-SJ-L02-307",
+      "type": "test_output",
+      "target": "Supplied deterministic statement",
+      "locator": "task assignment",
+      "observation": "The candidate was supplied as parsed JSON and as passing research.schema.json validation."
+    },
+    {
+      "evidence_id": "EV-SJ-L02-308",
+      "type": "calculation",
+      "target": "review aspects and penalties",
+      "locator": "20x5/5 + 25x5/5 + 15x5/5 + 15x5/5 + 15x5/5 + 5x3/5 + 5x5/5 - 0",
+      "observation": "Weighted scores total 98 and no observable workflow behavior supports a behavioral penalty."
+    }
+  ],
+  "strengths": [
+    "[EV-SJ-L02-305] The two JSON Schema sources now provide direct, separate, and correctly located support for strict response-contract behavior.",
+    "[EV-SJ-L02-303] The research supports bounded rubric design and disagreement inspection without treating judge output as ground truth.",
+    "[EV-SJ-L02-306] The handoff covers EP-02 completely while keeping EP-03 metrics out of scope."
+  ],
+  "defects": [],
+  "qualitative_feedback": "Approved. DEF-SJ-L02-001 is closed: CLM-L02-CONTRACT-001 now cites Core §10.3.2.3 and separately resolvable Validation §§6.1.1 and 6.5.3 through matching source records. All hard checks pass, every aspect meets the approval floor, and no critical defect or penalty remains. Exact score: 98 weighted points minus zero penalties."
+}
