@@ -1,0 +1,20 @@
+{
+    "name":  "barussi-felipe",
+    "interface":  {
+                      "displayName":  "Barussi Felipe"
+                  },
+    "plugins":  [
+                    {
+                        "name":  "evals-course-factory",
+                        "source":  {
+                                       "source":  "local",
+                                       "path":  "./agent/evals-course-factory"
+                                   },
+                        "policy":  {
+                                       "installation":  "AVAILABLE",
+                                       "authentication":  "ON_INSTALL"
+                                   },
+                        "category":  "Education"
+                    }
+                ]
+}
