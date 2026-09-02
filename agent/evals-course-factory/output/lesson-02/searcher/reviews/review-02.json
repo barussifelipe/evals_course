@@ -1,0 +1,187 @@
+{
+  "review_id": "REV-SEARCH-L02-02",
+  "judge": "searcher-judge",
+  "judgee": "searcher",
+  "artifact_revision": "1.1",
+  "context_revision": 7,
+  "verdict": "targeted_revision",
+  "total_score": 77,
+  "penalties": [],
+  "penalty_total": 0,
+  "penalty_evidence": [],
+  "aspects": [
+    {
+      "name": "Primary-source and paper quality",
+      "weight": 20,
+      "rating": 4,
+      "weighted_score": 16,
+      "evidence_ids": ["EV-SJ-L02-201", "EV-SJ-L02-202"],
+      "feedback": "The handoff uses relevant research papers and the official JSON Schema Core publication. The JSON Schema record conflates Core and Validation specifications while providing only the Core URL."
+    },
+    {
+      "name": "Claim-to-source entailment",
+      "weight": 25,
+      "rating": 4,
+      "weighted_score": 20,
+      "evidence_ids": ["EV-SJ-L02-203", "EV-SJ-L02-204", "EV-SJ-L02-205"],
+      "feedback": "The LLM-judge claims remain properly scoped, and the revised Core source directly establishes additionalProperties behavior. The stated locator is inaccurate and the Validation companion is not separately resolvable from a source record."
+    },
+    {
+      "name": "Coverage of planned concepts and failure modes",
+      "weight": 15,
+      "rating": 5,
+      "weighted_score": 15,
+      "evidence_ids": ["EV-SJ-L02-206"],
+      "feedback": "All four user stories remain covered, including bounded criteria, contract validation, ID alignment, replay limitations, and disagreement inspection."
+    },
+    {
+      "name": "Citation completeness and resolvability",
+      "weight": 15,
+      "rating": 2,
+      "weighted_score": 6,
+      "evidence_ids": ["EV-SJ-L02-201", "EV-SJ-L02-205"],
+      "feedback": "The three source URLs resolve, but the remediation did not supply the promised precise locator: additionalProperties is Core §10.3.2.3, not §10.3.2.2. The companion Validation specification cited for required/type has no separate source record or URL."
+    },
+    {
+      "name": "Technical accuracy and appropriate qualifications",
+      "weight": 15,
+      "rating": 4,
+      "weighted_score": 12,
+      "evidence_ids": ["EV-SJ-L02-203", "EV-SJ-L02-204", "EV-SJ-L02-207"],
+      "feedback": "The artifact accurately bounds cache replay and relational alignment as engineering inferences, and the Core source correctly supports extra-property control when configured with an appropriate subschema."
+    },
+    {
+      "name": "Seminal/recent source balance",
+      "weight": 5,
+      "rating": 3,
+      "weighted_score": 3,
+      "evidence_ids": ["EV-SJ-L02-202"],
+      "feedback": "The relevant 2023 papers and standards source are adequate for this narrow handoff, but no foundational older evaluation source complements them."
+    },
+    {
+      "name": "Builder-ready structured handoff",
+      "weight": 5,
+      "rating": 5,
+      "weighted_score": 5,
+      "evidence_ids": ["EV-SJ-L02-206", "EV-SJ-L02-207"],
+      "feedback": "The JSON cleanly separates sources, claims, scope, limitations, inference flags, user-story coverage, and evidence gaps."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "check_id": "CHK-SEARCH-001",
+      "method": "Supplied JSON parse/schema-validation result plus direct inspection of claim source_ids and source URLs.",
+      "expected": "Every material claim has at least one resolvable source.",
+      "actual": "5/5 material claims have a linked resolvable source URL (100%), but the required/type companion specification named in CLM-L02-CONTRACT-001 is not separately represented by a source record.",
+      "passed": true,
+      "severity": "major"
+    },
+    {
+      "check_id": "CHK-SEARCH-002",
+      "method": "Direct review of the cited ACL, arXiv, and JSON Schema Core publications and source records.",
+      "expected": "At least 80% of central claims have primary or authoritative support.",
+      "actual": "5/5 central claims cite a primary research paper or the authoritative JSON Schema publication (100%).",
+      "passed": true,
+      "severity": "critical"
+    },
+    {
+      "check_id": "CHK-SEARCH-003",
+      "method": "Compare source title, authors, year, and URL across source records.",
+      "expected": "Duplicate records are identified and the duplicate rate is reported.",
+      "actual": "0/3 duplicate source records (0%).",
+      "passed": true,
+      "severity": "minor"
+    },
+    {
+      "check_id": "CHK-SEARCH-004",
+      "method": "Inspect each source record for title, authors, year, source_type, URL, and authority_note.",
+      "expected": "Required title, authors, year, source type, URL, and authority note are present.",
+      "actual": "0 sources have missing required metadata.",
+      "passed": true,
+      "severity": "major"
+    },
+    {
+      "check_id": "CHK-SEARCH-005",
+      "method": "Compare the four approved plan user stories with claims and coverage entries.",
+      "expected": "Approved plan concepts have adequate evidence or an explicit, correctly bounded evidence gap.",
+      "actual": "4/4 user stories are marked covered (100%); stable-ID alignment and cache replay are explicitly bounded as engineering inferences.",
+      "passed": true,
+      "severity": "major"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "EV-SJ-L02-201",
+      "type": "source",
+      "target": "SRC-L02-GEVAL; SRC-L02-MTBENCH; SRC-L02-JSONSCHEMA",
+      "locator": "source URL fields",
+      "observation": "Direct review resolved all three URLs: ACL hosts G-Eval, arXiv hosts MT-Bench, and json-schema.org hosts the Draft 2020-12 Core specification."
+    },
+    {
+      "evidence_id": "EV-SJ-L02-202",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-02/searcher/sources.json",
+      "locator": "sources",
+      "observation": "The record contains two 2023 LLM-as-judge papers and one JSON Schema standard source, with no older foundational evaluation source."
+    },
+    {
+      "evidence_id": "EV-SJ-L02-203",
+      "type": "source",
+      "target": "SRC-L02-GEVAL; SRC-L02-MTBENCH",
+      "locator": "G-Eval ACL abstract; MT-Bench arXiv abstract",
+      "observation": "G-Eval describes criteria-driven form-filling evaluation; MT-Bench reports LLM-judge human-preference agreement while identifying position, verbosity, and self-enhancement biases."
+    },
+    {
+      "evidence_id": "EV-SJ-L02-204",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-02/searcher/sources.json",
+      "locator": "CLM-L02-ALIGN-001; CLM-L02-CACHE-001",
+      "observation": "Both claims explicitly distinguish course-pipeline inferences from the limits of their cited sources."
+    },
+    {
+      "evidence_id": "EV-SJ-L02-205",
+      "type": "source",
+      "target": "SRC-L02-JSONSCHEMA; CLM-L02-CONTRACT-001",
+      "locator": "JSON Schema Draft 2020-12 Core §§10.3.2.2-10.3.2.3",
+      "observation": "Direct review shows §10.3.2.2 defines patternProperties, while §10.3.2.3 defines additionalProperties and applies it to names not matched by properties or patternProperties. The revised locator is therefore still one subsection wrong; its companion Validation specification is named but has no source-record URL."
+    },
+    {
+      "evidence_id": "EV-SJ-L02-206",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-02/searcher/sources.json",
+      "locator": "claims; coverage; evidence_gaps",
+      "observation": "Five scoped claims link to all four EP-02 stories and explicitly exclude EP-03 metrics."
+    },
+    {
+      "evidence_id": "EV-SJ-L02-207",
+      "type": "test_output",
+      "target": "Supplied deterministic statement",
+      "locator": "task assignment",
+      "observation": "The candidate was supplied as parsed JSON and as passing research.schema.json validation."
+    },
+    {
+      "evidence_id": "EV-SJ-L02-208",
+      "type": "calculation",
+      "target": "review aspects and penalties",
+      "locator": "20x4/5 + 25x4/5 + 15x5/5 + 15x2/5 + 15x4/5 + 5x3/5 + 5x5/5 - 0",
+      "observation": "Weighted scores total 77 and no observable workflow behavior supports a behavioral penalty."
+    }
+  ],
+  "strengths": [
+    "[EV-SJ-L02-203] The research continues to use appropriate evidence for bounded rubric design and judge-bias limitations.",
+    "[EV-SJ-L02-204] Course engineering constraints are explicitly separated from externally established results.",
+    "[EV-SJ-L02-206] The handoff remains tightly scoped to EP-02 and complete across its planned stories."
+  ],
+  "defects": [
+    {
+      "defect_id": "DEF-SJ-L02-001",
+      "severity": "major",
+      "target": "SRC-L02-JSONSCHEMA; CLM-L02-CONTRACT-001",
+      "evidence_ids": ["EV-SJ-L02-205"],
+      "problem": "Not closed: the revised source is authoritative, but it cites §10.3.2.2 for additionalProperties, whereas the directly verified definition is §10.3.2.3. It also names the Validation companion without a separate resolvable source record/URL for required and type.",
+      "consequence": "The central strict-contract evidence remains imprecise, so a builder cannot trace every claimed required, type, and extra-field behavior to the artifact's source records.",
+      "acceptance_condition": "Set CLM-L02-CONTRACT-001's Core locator to §10.3.2.3 and add a separate authoritative Validation source record with its URL and §§6.1.1 and 6.5.3, then assign both source IDs to the claim and make its title, authority note, locator, and support text match those two sources."
+    }
+  ],
+  "qualitative_feedback": "DEF-SJ-L02-001 is not closed. The source replacement is directionally correct, but direct verification finds the promised precise locator remains wrong and the Validation companion remains uncitable through a source record. Exact score: 77 weighted points minus zero penalties. All deterministic checklist measures pass, but the 77 score and citation aspect below the approval floor yield targeted_revision."
+}

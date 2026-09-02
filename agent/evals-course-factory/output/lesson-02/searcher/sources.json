@@ -1,0 +1,114 @@
+{
+  "epic_id": "EP-02",
+  "context_revision": 7,
+  "plan_revision": "1.1",
+  "sources": [
+    {
+      "source_id": "SRC-L02-GEVAL",
+      "title": "G-Eval: NLG Evaluation using GPT-4 with Better Human Alignment",
+      "authors": ["Yang Liu", "Dan Iter", "Yichong Xu", "Shuohang Wang", "Ruochen Xu", "Chenguang Zhu"],
+      "year": 2023,
+      "source_type": "paper",
+      "url": "https://aclanthology.org/2023.emnlp-main.153/",
+      "doi_or_arxiv": "https://arxiv.org/abs/2303.16634",
+      "authority_note": "Peer-reviewed EMNLP paper in ACL Anthology; introduces criteria-driven LLM evaluation with a form-filling output and reports evaluator bias analysis."
+    },
+    {
+      "source_id": "SRC-L02-MTBENCH",
+      "title": "Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena",
+      "authors": ["Lianmin Zheng", "Wei-Lin Chiang", "Ying Sheng", "Siyuan Zhuang", "Zhanghao Wu", "Yonghao Zhuang", "Zi Lin", "Zhuohan Li", "Dacheng Li", "Eric P. Xing", "Hao Zhang", "Joseph E. Gonzalez", "Ion Stoica"],
+      "year": 2023,
+      "source_type": "paper",
+      "url": "https://arxiv.org/abs/2306.05685",
+      "doi_or_arxiv": "https://arxiv.org/abs/2306.05685",
+      "authority_note": "Original benchmark paper from the LMSYS/UC Berkeley research team; empirically studies agreement and position, verbosity, and self-enhancement biases in LLM judges."
+    },
+    {
+      "source_id": "SRC-L02-JSONSCHEMA",
+      "title": "JSON Schema Draft 2020-12 Core and Validation Specifications",
+      "authors": ["JSON Schema community"],
+      "year": 2020,
+      "source_type": "standard",
+      "url": "https://json-schema.org/draft/2020-12/json-schema-core.html",
+      "doi_or_arxiv": null,
+      "authority_note": "Official JSON Schema Draft 2020-12 Core specification; section 10.3.2.3 defines additionalProperties behavior for object properties."
+    },
+    {
+      "source_id": "SRC-L02-JSONSCHEMA-VALIDATION",
+      "title": "JSON Schema Draft 2020-12 Validation Specification",
+      "authors": ["JSON Schema community"],
+      "year": 2020,
+      "source_type": "standard",
+      "url": "https://json-schema.org/draft/2020-12/json-schema-validation.html",
+      "doi_or_arxiv": null,
+      "authority_note": "Official JSON Schema Draft 2020-12 Validation specification; sections 6.1.1 and 6.5.3 define type and required validation assertions."
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "CLM-L02-RUBRIC-001",
+      "claim": "A judge prompt should state the evaluation task and explicit criteria, then request a constrained form-like verdict rather than an unconstrained quality impression.",
+      "source_ids": ["SRC-L02-GEVAL"],
+      "source_locator": "ACL Anthology paper, abstract and Sections 2-3: criteria prompt, generated evaluation steps, and form-filling evaluator output.",
+      "support": "G-Eval describes feeding task introduction and evaluation criteria to an LLM and formatting the evaluator output as a form.",
+      "scope": "Supports the lesson’s bounded rubric and one-verdict response design for a binary regression criterion.",
+      "limitations": "G-Eval primarily evaluates summarization/dialogue quality and does not establish that any particular binary rubric is valid for this course’s regression.",
+      "inference": true,
+      "user_story_ids": ["US-L02-01", "US-L02-02"]
+    },
+    {
+      "claim_id": "CLM-L02-BIAS-001",
+      "claim": "LLM judges can agree substantially with human preferences while still exhibiting systematic biases, including position, verbosity, and self-enhancement effects; therefore a judge prediction is an auditable proxy, not ground truth.",
+      "source_ids": ["SRC-L02-MTBENCH", "SRC-L02-GEVAL"],
+      "source_locator": "MT-Bench paper abstract and Sections 4-5; G-Eval paper abstract and Section 4 bias analysis.",
+      "support": "The papers report human agreement alongside documented judge biases, including preference for outputs from the judge’s own model family in G-Eval.",
+      "scope": "Justifies inspecting disagreements and excluding unrelated qualities from the rubric.",
+      "limitations": "Bias magnitude depends on model, prompt, task, and comparison protocol; these papers do not predict the behavior of the offline fixture.",
+      "inference": false,
+      "user_story_ids": ["US-L02-01", "US-L02-04"]
+    },
+    {
+      "claim_id": "CLM-L02-CONTRACT-001",
+      "claim": "A structured response contract can require named fields and reject missing or extra fields, making malformed judge output fail validation before it becomes prediction data.",
+      "source_ids": ["SRC-L02-JSONSCHEMA", "SRC-L02-JSONSCHEMA-VALIDATION"],
+      "source_locator": "JSON Schema Draft 2020-12 Core, Section 10.3.2.3 (additionalProperties); Validation specification, Sections 6.1.1 (type) and 6.5.3 (required).",
+      "support": "The Core specification defines additionalProperties behavior for names not matched by properties or patternProperties; the Validation specification defines required and type assertions.",
+      "scope": "Supports validating case_id, binary verdict, and non-empty reason in cached responses.",
+      "limitations": "JSON Schema alone does not enforce uniqueness or cross-record exact ID coverage; those require explicit application checks.",
+      "inference": true,
+      "user_story_ids": ["US-L02-02", "US-L02-03"]
+    },
+    {
+      "claim_id": "CLM-L02-ALIGN-001",
+      "claim": "Predictions must be joined to reference cases by stable case_id with exactly one response per case; row order is not an adequate identity contract.",
+      "source_ids": ["SRC-L02-JSONSCHEMA"],
+      "source_locator": "Application-level invariant derived from the plan’s CP-L02-03-A observable check; JSON Schema source establishes field-level contract but not relational coverage.",
+      "support": "The source supports validating the case_id field’s presence/type; exact uniqueness, unknown-ID rejection, and coverage are explicit pipeline checks.",
+      "scope": "Supports the lesson’s one-to-one alignment and preservation of human_label.",
+      "limitations": "This is a course engineering inference, not a claim that the cited standard specifies joins.",
+      "inference": true,
+      "user_story_ids": ["US-L02-03", "US-L02-04"]
+    },
+    {
+      "claim_id": "CLM-L02-CACHE-001",
+      "claim": "Replaying cached judge responses makes the parsing, alignment, persistence, and disagreement-inspection pipeline reproducible offline, but it does not measure live-provider variance or current model behavior.",
+      "source_ids": ["SRC-L02-GEVAL", "SRC-L02-MTBENCH"],
+      "source_locator": "Inference from the plan’s offline_replay contract, contrasted with the papers’ live-model experimental protocols.",
+      "support": "The cited studies evaluate particular model/prompt runs; replaying stored responses necessarily fixes those responses and omits new provider calls.",
+      "scope": "Supports the explicit limitation learners must state for the offline build-along.",
+      "limitations": "The papers do not evaluate this exact cache design; the reproducibility statement is a pipeline-level inference.",
+      "inference": true,
+      "user_story_ids": ["US-L02-02", "US-L02-04"]
+    }
+  ],
+  "coverage": [
+    {"user_story_id": "US-L02-01", "claim_ids": ["CLM-L02-RUBRIC-001", "CLM-L02-BIAS-001"], "status": "covered"},
+    {"user_story_id": "US-L02-02", "claim_ids": ["CLM-L02-RUBRIC-001", "CLM-L02-CONTRACT-001", "CLM-L02-CACHE-001"], "status": "covered"},
+    {"user_story_id": "US-L02-03", "claim_ids": ["CLM-L02-CONTRACT-001", "CLM-L02-ALIGN-001"], "status": "covered"},
+    {"user_story_id": "US-L02-04", "claim_ids": ["CLM-L02-BIAS-001", "CLM-L02-ALIGN-001", "CLM-L02-CACHE-001"], "status": "covered"}
+  ],
+  "evidence_gaps": [
+    "No primary source was needed or used for EP-03 confusion-matrix, precision, or recall formulas; those concepts are explicitly out of EP-02 scope.",
+    "The sources do not establish universal guarantees for binary judge validity, exact-ID coverage, or cache reproducibility; those remain explicit course engineering invariants and limitations."
+  ]
+}
