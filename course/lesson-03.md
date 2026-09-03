@@ -43,6 +43,12 @@ If any rule fails, stop. Guessing would change which cases are scored.
 
 The notebook indexes both files by `case_id`, compares their ID sets, and builds aligned tuples. Reordering either file cannot change the result. This preserves the required pairing between ground truth and predictions ([CLM-L03-005](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.precision_score.html)).
 
+Think of the join as an evidence check before it is a data operation. The human file answers, “What happened in this case?” The prediction file answers, “What did the judge decide for this case?” A score is meaningful only when both answers refer to the same event. Matching by position assumes that two independently produced files stayed in the same order forever. Matching by `case_id` states the relationship directly and survives sorting, filtering, and serialization.
+
+Three failures should stop scoring immediately. A duplicate ID makes one identity point to multiple records. A missing ID leaves a human label without a prediction, or a prediction without ground truth. A copied `human_label` that differs between files signals that the handoff changed the reference answer. Silently dropping, overwriting, or accepting any of these cases would change the population being measured and could still produce a plausible decimal. The notebook rejects them before constructing the confusion matrix.
+
+This is why the prediction artifact preserves `human_label` even though Lesson 3 can also read it from the original cases. The duplicate value acts as a handoff checksum that is easy to inspect: for every ID, the copied label must equal the source label. After that check passes, the grader uses the source human label and the judge label to create one aligned scoring row. The reason text remains available for diagnosis, but it does not affect the numerical outcome.
+
 Keep one meaning visible:
 
 > `1` means **regression present** for both the human and the judge.
