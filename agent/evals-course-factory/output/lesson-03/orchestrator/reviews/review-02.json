@@ -1,0 +1,236 @@
+{
+  "review_id": "REV-ORCH-L03-02",
+  "judge": "orchestrator-judge",
+  "judgee": "orchestrator",
+  "artifact_revision": "1.1",
+  "context_revision": 13,
+  "verdict": "approved",
+  "total_score": 100,
+  "penalties": [],
+  "penalty_total": 0,
+  "penalty_evidence": [],
+  "aspects": [
+    {
+      "name": "Assignment constraint coverage and traceability",
+      "weight": 20,
+      "rating": 5,
+      "weighted_score": 20,
+      "evidence_ids": [
+        "EV-OJ-L03-201",
+        "EV-OJ-L03-202",
+        "EV-OJ-L03-203"
+      ],
+      "feedback": "The plan stays within EP-03, uses four bounded sections and one 18-minute build-along, declares the cumulative inputs and final output, and explicitly carries the human-required minimum of 10 stable case IDs into the builder contract."
+    },
+    {
+      "name": "Breaking points and observable checkpoints",
+      "weight": 20,
+      "rating": 5,
+      "weighted_score": 20,
+      "evidence_ids": [
+        "EV-OJ-L03-204",
+        "EV-OJ-L03-205"
+      ],
+      "feedback": "The single checkpoint is placed after the four-section learning sequence and is observable through a fresh-kernel run that validates alignment, prints all confusion-matrix counts and both metrics, round-trips the report, and ends with PASS."
+    },
+    {
+      "name": "Backward design from the capstone",
+      "weight": 20,
+      "rating": 5,
+      "weighted_score": 20,
+      "evidence_ids": [
+        "EV-OJ-L03-204",
+        "EV-OJ-L03-206"
+      ],
+      "feedback": "The lesson works backward from the required grader: identity-safe joins enable case outcomes, outcomes enable precision and recall, and deterministic expected values plus persistence complete the capstone."
+    },
+    {
+      "name": "Prerequisite and artifact dependency correctness",
+      "weight": 15,
+      "rating": 5,
+      "weighted_score": 15,
+      "evidence_ids": [
+        "EV-OJ-L03-207",
+        "EV-OJ-L03-208"
+      ],
+      "feedback": "The dependency chain is feasible and cumulative: EP-03 consumes both approved upstream artifacts, joins by case_id rather than row order, checks copied labels, preserves schemas and semantics, and emits grader_report.json."
+    },
+    {
+      "name": "Task briefs and agent interface clarity",
+      "weight": 10,
+      "rating": 5,
+      "weighted_score": 10,
+      "evidence_ids": [
+        "EV-OJ-L03-203",
+        "EV-OJ-L03-209"
+      ],
+      "feedback": "Searcher and builder scopes state their inputs, owned outputs, exclusions, fixture-update authority, preservation constraints, lesson shape, execution expectations, and prohibited expansions precisely enough for bounded handoffs."
+    },
+    {
+      "name": "Offline and reproducibility strategy",
+      "weight": 10,
+      "rating": 5,
+      "weighted_score": 10,
+      "evidence_ids": [
+        "EV-OJ-L03-205",
+        "EV-OJ-L03-210"
+      ],
+      "feedback": "The canonical Python 3.12 notebook runs without network access, validates at least 10 records, asserts predeclared counts and metrics, persists and reloads the report, and records executed output in the required repository location."
+    },
+    {
+      "name": "Context consistency and change tracking",
+      "weight": 5,
+      "rating": 5,
+      "weighted_score": 5,
+      "evidence_ids": [
+        "EV-OJ-L03-202",
+        "EV-OJ-L03-211"
+      ],
+      "feedback": "Plan revision 1.1 targets context revision 13 and faithfully reflects DEC-L03-003: human approval, the at-least-10-case requirement, minimal cumulative fixture changes, and unchanged Git restrictions."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "check_id": "CHK-ORCH-001",
+      "method": "Inspect CONTEXT.md course hierarchy and plan epic scope.",
+      "expected": "The course contains 2-3 lessons and this run plans no more than one lesson.",
+      "actual": "CONTEXT.md defines three epics; plan revision 1.1 contains only EP-03.",
+      "passed": true,
+      "severity": "critical"
+    },
+    {
+      "check_id": "CHK-ORCH-002",
+      "method": "Count plan.user_stories.",
+      "expected": "The current lesson contains 1-5 sections.",
+      "actual": "Four sections are declared: US-L03-01 through US-L03-04.",
+      "passed": true,
+      "severity": "critical"
+    },
+    {
+      "check_id": "CHK-ORCH-003",
+      "method": "Inspect plan.build_along and capstone_trace builder interface.",
+      "expected": "Input artifact, output artifact, offline replay method, and terminal course/capstone interface are declared.",
+      "actual": "The plan consumes eval_cases.jsonl and judge_predictions.jsonl, produces grader_report.json, specifies a fresh-kernel offline replay, and identifies the report as the final cumulative capstone artifact.",
+      "passed": true,
+      "severity": "critical"
+    },
+    {
+      "check_id": "CHK-ORCH-004",
+      "method": "Count checkpoints nested within plan.user_stories.",
+      "expected": "The lesson contains 1-3 observable checkpoints assigned within a section.",
+      "actual": "Exactly one checkpoint, CP-L03-03-A, is assigned to US-L03-04 and declares a visible fresh-kernel PASS condition.",
+      "passed": true,
+      "severity": "critical"
+    },
+    {
+      "check_id": "CHK-ORCH-005",
+      "method": "Inspect plan.build_along and the ordered section dependency chain.",
+      "expected": "The lesson ends with exactly one build-along estimated at no more than 20 minutes.",
+      "actual": "Exactly one cumulative build-along follows US-L03-01 through US-L03-04 and is estimated at 18 minutes.",
+      "passed": true,
+      "severity": "critical"
+    },
+    {
+      "check_id": "CHK-ORCH-006",
+      "method": "Trace the checkpoint and output artifact through plan.capstone_trace to the assignment capstone.",
+      "expected": "Every checkpoint and output artifact traces to an explicit capstone acceptance criterion.",
+      "actual": "CP-L03-03-A prints the confusion matrix, precision, and recall; grader_report.json persists the same checked counts, policies, and metrics as the final cumulative capstone artifact.",
+      "passed": true,
+      "severity": "critical"
+    },
+    {
+      "check_id": "CHK-ORCH-007",
+      "method": "Parse the candidate JSON and inspect epic_id, context_revision, plan_revision, build-along timing, artifact fields, and minimum fixture size declarations.",
+      "expected": "Valid JSON for EP-03/context 13/plan 1.1 declares one 18-minute build-along, input and output artifacts, and at least 10 cases.",
+      "actual": "The JSON is valid and declares epic_id EP-03, context_revision 13, plan_revision 1.1, one 18-minute build-along, both input and output artifacts, and repeated executable requirements for at least 10 unique stable case IDs.",
+      "passed": true,
+      "severity": "critical"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "EV-OJ-L03-201",
+      "type": "constraint",
+      "target": "ref/instructions.md",
+      "locator": "How to build it; Shape; Rules; How we run your submission",
+      "observation": "The assignment requires backward design from a measurable capstone, up to five sections, 1-3 checkpoints, one cumulative build-along under 20 minutes, text-only delivery, and offline runnable output."
+    },
+    {
+      "evidence_id": "EV-OJ-L03-202",
+      "type": "constraint",
+      "target": "CONTEXT.md",
+      "locator": "Context revision; Current epic; DEC-L03-003",
+      "observation": "Revision 13 records human approval of EP-03 plan action and requires at least 10 stable case IDs through minimal cumulative fixture updates that preserve schemas, existing IDs, label semantics, and user edits."
+    },
+    {
+      "evidence_id": "EV-OJ-L03-203",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-03/orchestrator/plan.json",
+      "locator": "/user_stories; /build_along; /capstone_trace/6",
+      "observation": "The plan defines four one-idea sections, one 18-minute build-along, explicit cumulative input and output artifacts, and a builder brief bounded to the approved EP-03 deliverables and fixture updates."
+    },
+    {
+      "evidence_id": "EV-OJ-L03-204",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-03/orchestrator/plan.json",
+      "locator": "/user_stories/3/checkpoints/0; /capstone_trace/0-2",
+      "observation": "CP-L03-03-A directly addresses breaking point 3 and requires the learner to build and visibly run the grader over aligned prior artifacts, including zero-division handling and a final PASS."
+    },
+    {
+      "evidence_id": "EV-OJ-L03-205",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-03/orchestrator/plan.json",
+      "locator": "/build_along/visible_checks",
+      "observation": "Five incremental checks cover fixture size, identity and label validation, case-level outcome partitioning, exact counts and metrics, report round-trip equality, and final PASS."
+    },
+    {
+      "evidence_id": "EV-OJ-L03-206",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-03/orchestrator/plan.json",
+      "locator": "/user_stories/0-3/depends_on; /user_stories/0-3/acceptance_criteria",
+      "observation": "The dependency chain moves from valid identity joins to the four outcomes, then precision and recall, then deterministic proof and persistence, so each section supplies the next required capability."
+    },
+    {
+      "evidence_id": "EV-OJ-L03-207",
+      "type": "constraint",
+      "target": "CONTEXT.md",
+      "locator": "EP-01 approved artifact contract; EP-02 approved artifact contract; Cross-epic artifact interfaces",
+      "observation": "The approved upstream contracts provide stable case IDs, human labels, judge labels, and the cumulative eval_cases.jsonl to judge_predictions.jsonl to grader_report.json interface required by EP-03."
+    },
+    {
+      "evidence_id": "EV-OJ-L03-208",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-03/orchestrator/plan.json",
+      "locator": "/prerequisites; /user_stories/0/acceptance_criteria; /build_along/input_artifact; /build_along/output_artifact",
+      "observation": "The plan requires both prior artifacts, joins them by stable case_id, rejects coverage or copied-label mismatches, and produces build/lesson-03/grader_report.json."
+    },
+    {
+      "evidence_id": "EV-OJ-L03-209",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-03/orchestrator/plan.json",
+      "locator": "/capstone_trace/5-6",
+      "observation": "The searcher and builder briefs declare owned paths, required inputs, exact bounded subject matter, execution requirements, preservation duties, and explicit exclusions without granting merge authority."
+    },
+    {
+      "evidence_id": "EV-OJ-L03-210",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-03/orchestrator/plan.json",
+      "locator": "/build_along/offline_replay; /capstone_trace/4",
+      "observation": "The plan specifies a fresh-kernel Python 3.12 replay using repository fixtures only, with predeclared exact outcomes over at least 10 IDs, count conservation, persisted-report reload, and recorded executed output."
+    },
+    {
+      "evidence_id": "EV-OJ-L03-211",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-03/orchestrator/plan.json",
+      "locator": "/epic_id; /context_revision; /plan_revision; /capstone_trace/6",
+      "observation": "The artifact identifies EP-03, context revision 13, and plan revision 1.1, and incorporates the authorized minimum fixture expansion while preserving prior interfaces and limiting work to the current epic."
+    }
+  ],
+  "strengths": [
+    "EV-OJ-L03-204 and EV-OJ-L03-206 show unusually clean backward design: every teaching step removes a concrete prerequisite for the final grader check.",
+    "EV-OJ-L03-205 and EV-OJ-L03-210 make the capstone independently reproducible through exact fixture expectations, count conservation, persistence, reload, and a fresh-kernel PASS.",
+    "EV-OJ-L03-202 and EV-OJ-L03-209 bound the human-requested fixture expansion tightly enough to preserve the cumulative chain without turning EP-03 into a rewrite of prior lessons."
+  ],
+  "defects": [],
+  "qualitative_feedback": "Approved. Plan revision 1.1 fully covers the assignment and context revision 13, passes every critical deterministic check, and cleanly incorporates the authorized minimum of 10 cumulative cases. The dependency chain, agent handoffs, offline replay, and capstone trace are explicit and testable; no remediation is required."
+}

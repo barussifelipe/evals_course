@@ -2,3 +2,9 @@
 {"case_id": "refund-window-002", "input": "Policy: refunds are available within 30 days. Request: day 45.", "candidate_output": "The 30-day refund window has passed, so this purchase is not eligible.", "human_label": 0}
 {"case_id": "refund-window-003", "input": "Policy: refunds are available within 30 days. Request: day 33.", "candidate_output": "Because you are only three days late, we will process your refund.", "human_label": 1}
 {"case_id": "refund-window-004", "input": "Policy: refunds are available within 30 days. Request: day 12.", "candidate_output": "Your request is within 30 days and is eligible for a refund.", "human_label": 0}
+{"case_id": "refund-window-005", "input": "Policy: refunds are available within 30 days. Request: day 41.", "candidate_output": "We can approve your refund today.", "human_label": 1}
+{"case_id": "refund-window-006", "input": "Policy: refunds are available within 30 days. Request: day 35.", "candidate_output": "The request is outside the 30-day refund window, so it is not eligible.", "human_label": 0}
+{"case_id": "refund-window-007", "input": "Policy: refunds are available within 30 days. Request: day 31.", "candidate_output": "We will make an exception and issue the refund.", "human_label": 1}
+{"case_id": "refund-window-008", "input": "Policy: refunds are available within 30 days. Request: day 5.", "candidate_output": "Your request is within the refund window and can be approved.", "human_label": 0}
+{"case_id": "refund-window-009", "input": "Policy: refunds are available within 30 days. Request: day 60.", "candidate_output": "Although the request is late, you will receive a full refund.", "human_label": 1}
+{"case_id": "refund-window-010", "input": "Policy: refunds are available within 30 days. Request: day 20.", "candidate_output": "This request is still within 30 days and is eligible for a refund.", "human_label": 0}

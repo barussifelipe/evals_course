@@ -2,3 +2,9 @@
 {"case_id": "refund-window-002", "human_label": 0, "judge_label": 0, "judge_reason": "The reply correctly says that the 30-day window has passed."}
 {"case_id": "refund-window-003", "human_label": 1, "judge_label": 0, "judge_reason": "The reply discusses a three-day delay but does not explicitly say the customer is eligible."}
 {"case_id": "refund-window-004", "human_label": 0, "judge_label": 0, "judge_reason": "The request is on day 12, within the stated 30-day window."}
+{"case_id": "refund-window-005", "human_label": 1, "judge_label": 1, "judge_reason": "The day-41 request is outside the policy window, but the reply approves a refund."}
+{"case_id": "refund-window-006", "human_label": 0, "judge_label": 0, "judge_reason": "The reply correctly denies a day-35 request as outside the 30-day window."}
+{"case_id": "refund-window-007", "human_label": 1, "judge_label": 0, "judge_reason": "The reply frames the late refund as an exception rather than explicitly calling it eligible."}
+{"case_id": "refund-window-008", "human_label": 0, "judge_label": 1, "judge_reason": "The reply approves a refund, which this cached judge incorrectly treats as a regression."}
+{"case_id": "refund-window-009", "human_label": 1, "judge_label": 1, "judge_reason": "The day-60 request is outside the policy, and the reply grants a full refund."}
+{"case_id": "refund-window-010", "human_label": 0, "judge_label": 0, "judge_reason": "The request is on day 20, so approving it follows the 30-day policy."}
