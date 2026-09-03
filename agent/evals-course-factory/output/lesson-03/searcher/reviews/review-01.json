@@ -1,0 +1,196 @@
+{
+  "review_id": "REV-SEARCH-L03-01",
+  "judge": "searcher-judge",
+  "judgee": "searcher",
+  "artifact_revision": "1.0",
+  "context_revision": 14,
+  "verdict": "targeted_revision",
+  "total_score": 77,
+  "penalties": [],
+  "penalty_total": 0,
+  "penalty_evidence": [],
+  "aspects": [
+    {
+      "name": "Primary-source and paper quality",
+      "weight": 20,
+      "rating": 5,
+      "weighted_score": 20,
+      "evidence_ids": ["EV-SJ-L03-101", "EV-SJ-L03-102"],
+      "feedback": "The handoff uses a peer-reviewed foundational paper, official scikit-learn documentation, and university statistics material; all are appropriate authorities for their scoped claims."
+    },
+    {
+      "name": "Claim-to-source entailment",
+      "weight": 25,
+      "rating": 3,
+      "weighted_score": 15,
+      "evidence_ids": ["EV-SJ-L03-103", "EV-SJ-L03-104"],
+      "feedback": "The outcomes, formulas, positive-class convention, identity-join inference, and sample-size qualification are supported or explicitly bounded. CLM-L03-004 additionally asserts recall zero-division behavior, but names only a precision_score source and locator."
+    },
+    {
+      "name": "Coverage of planned concepts and failure modes",
+      "weight": 15,
+      "rating": 4,
+      "weighted_score": 12,
+      "evidence_ids": ["EV-SJ-L03-105"],
+      "feedback": "All four approved user stories are mapped to scoped claims, including identity alignment, the four outcomes, positive-class metrics, and explicit zero-division policy. The recall half of that policy needs direct evidence."
+    },
+    {
+      "name": "Citation completeness and resolvability",
+      "weight": 15,
+      "rating": 3,
+      "weighted_score": 9,
+      "evidence_ids": ["EV-SJ-L03-101", "EV-SJ-L03-106"],
+      "feedback": "All source URLs resolve and every claim has a linked record, but the Fawcett locators misplace its four-outcome discussion and Figure 1, and CLM-L03-004 lacks a recall-specific locator."
+    },
+    {
+      "name": "Technical accuracy and appropriate qualifications",
+      "weight": 15,
+      "rating": 4,
+      "weighted_score": 12,
+      "evidence_ids": ["EV-SJ-L03-103", "EV-SJ-L03-104", "EV-SJ-L03-105"],
+      "feedback": "The artifact correctly distinguishes course decisions from source facts, preserves binary positive-class scope, and does not turn the ten-case fixture into a universal statistical threshold. The unsupported recall attribution must be repaired."
+    },
+    {
+      "name": "Seminal/recent source balance",
+      "weight": 5,
+      "rating": 4,
+      "weighted_score": 4,
+      "evidence_ids": ["EV-SJ-L03-102"],
+      "feedback": "The 2006 foundational paper is balanced by current official documentation and current university technical material."
+    },
+    {
+      "name": "Builder-ready structured handoff",
+      "weight": 5,
+      "rating": 4,
+      "weighted_score": 4,
+      "evidence_ids": ["EV-SJ-L03-105"],
+      "feedback": "The JSON cleanly separates sources, claims, scope, limitations, inference flags, story coverage, and evidence gaps. Correcting the two citation defects will make the zero-division guidance safe to implement."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "check_id": "CHK-SEARCH-001",
+      "method": "Inspect all six claims, their source_ids, and the cited source URLs.",
+      "expected": "Every material claim has at least one resolvable source.",
+      "actual": "6/6 material claims link to at least one resolvable source record (100%).",
+      "passed": true,
+      "severity": "major"
+    },
+    {
+      "check_id": "CHK-SEARCH-002",
+      "method": "Classify the authority of each source supporting the six central claims.",
+      "expected": "At least 80% of central claims have primary or authoritative support.",
+      "actual": "6/6 central claims cite a peer-reviewed, official, or university-authoritative source record (100%); CLM-L03-004 still needs recall-specific direct support.",
+      "passed": true,
+      "severity": "critical"
+    },
+    {
+      "check_id": "CHK-SEARCH-003",
+      "method": "Compare title, authors, year, and URL across the three source records.",
+      "expected": "Duplicate records are identified and the duplicate rate is reported.",
+      "actual": "0/3 duplicate source records (0%).",
+      "passed": true,
+      "severity": "minor"
+    },
+    {
+      "check_id": "CHK-SEARCH-004",
+      "method": "Inspect every source record for title, authors, year, source_type, URL, and authority_note.",
+      "expected": "Required source metadata is present.",
+      "actual": "0 sources have missing required metadata.",
+      "passed": true,
+      "severity": "major"
+    },
+    {
+      "check_id": "CHK-SEARCH-005",
+      "method": "Compare the four approved EP-03 user stories with claims, coverage entries, and stated evidence gaps.",
+      "expected": "Approved plan concepts have adequate evidence or an explicit, correctly bounded evidence gap.",
+      "actual": "4/4 approved user stories are covered (100%); three evidence gaps are explicit, including the course-specific case-ID and ten-case constraints.",
+      "passed": true,
+      "severity": "major"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "EV-SJ-L03-101",
+      "type": "source",
+      "target": "SRC-L03-001; SRC-L03-002; SRC-L03-003",
+      "locator": "source URL fields",
+      "observation": "Direct review resolved the Fawcett PDF, official scikit-learn precision_score documentation, and Penn State STAT 200 material."
+    },
+    {
+      "evidence_id": "EV-SJ-L03-102",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-03/searcher/sources.json",
+      "locator": "sources",
+      "observation": "The three source records combine a 2006 peer-reviewed paper with current official documentation and university technical material."
+    },
+    {
+      "evidence_id": "EV-SJ-L03-103",
+      "type": "source",
+      "target": "SRC-L03-001; SRC-L03-002",
+      "locator": "Fawcett, Pattern Recognition Letters 27 (2006), p. 861 / PDF page 2, Figure 1 and four-outcomes paragraph; precision_score documentation, formula, pos_label, and zero_division sections",
+      "observation": "Fawcett defines TP, FP, FN, and TN and the confusion matrix; scikit-learn defines precision as TP/(TP+FP), exposes pos_label, and permits an explicit zero-division value."
+    },
+    {
+      "evidence_id": "EV-SJ-L03-104",
+      "type": "source",
+      "target": "CLM-L03-004; SRC-L03-002",
+      "locator": "CLM-L03-004 source_ids and source_locator; precision_score documentation Notes",
+      "observation": "The claim says both precision and recall denominators can be zero, but its only linked source is precision_score and its locator covers TP+FP only. No recall_score source record or recall locator is supplied."
+    },
+    {
+      "evidence_id": "EV-SJ-L03-105",
+      "type": "artifact",
+      "target": "agent/evals-course-factory/output/lesson-03/searcher/sources.json",
+      "locator": "claims; coverage; evidence_gaps",
+      "observation": "Six scoped claims map across US-L03-01 through US-L03-04, while the handoff explicitly labels ID joining and the at-least-ten fixture as engineering or course constraints rather than universal metric facts."
+    },
+    {
+      "evidence_id": "EV-SJ-L03-106",
+      "type": "source",
+      "target": "CLM-L03-001; CLM-L03-002; CLM-L03-003; SRC-L03-001",
+      "locator": "CLM source_locator fields; Fawcett PDF page 2 / journal p. 861",
+      "observation": "The artifact locates the four-outcome discussion and Figure 1 at PDF pp. 862-863, but direct inspection places them at journal p. 861, PDF page 2."
+    },
+    {
+      "evidence_id": "EV-SJ-L03-107",
+      "type": "test_output",
+      "target": "Supplied deterministic results",
+      "locator": "task assignment",
+      "observation": "The supplied results report valid JSON, EP-03, context revision 14, plan revision 1.1, three sources, six claims, zero unsuccessful searches, and three evidence gaps."
+    },
+    {
+      "evidence_id": "EV-SJ-L03-108",
+      "type": "calculation",
+      "target": "review aspects and penalties",
+      "locator": "20x5/5 + 25x3/5 + 15x4/5 + 15x3/5 + 15x4/5 + 5x4/5 + 5x4/5 - 0",
+      "observation": "Weighted scores total 77; no observable workflow behavior supports a behavioral penalty."
+    }
+  ],
+  "strengths": [
+    "[EV-SJ-L03-103] The research correctly grounds the binary outcome vocabulary and precision in authoritative sources.",
+    "[EV-SJ-L03-105] Scope, limitations, inference flags, and evidence gaps keep course decisions distinct from source-supported facts.",
+    "[EV-SJ-L03-107] The submitted handoff meets the supplied EP-03, revision, count, JSON, and search-result constraints."
+  ],
+  "defects": [
+    {
+      "defect_id": "DEF-SJ-L03-001",
+      "severity": "major",
+      "target": "CLM-L03-004",
+      "evidence_ids": ["EV-SJ-L03-104"],
+      "problem": "The claim attributes zero-division behavior for both precision and recall to a precision_score-only source and locator.",
+      "consequence": "The builder lacks direct evidence for the required recall zero-division policy and could treat an unsupported attribution as a library guarantee.",
+      "acceptance_condition": "Add the official recall_score documentation as a source record or direct source reference, cite its TP+FN zero-division note in CLM-L03-004, and retain 0.0 as the explicitly declared course policy rather than a universal requirement."
+    },
+    {
+      "defect_id": "DEF-SJ-L03-002",
+      "severity": "minor",
+      "target": "CLM-L03-001; CLM-L03-002; CLM-L03-003",
+      "evidence_ids": ["EV-SJ-L03-106"],
+      "problem": "The Fawcett locators identify the four-outcome discussion and Figure 1 as PDF pp. 862-863 even though they occur on journal p. 861 / PDF page 2.",
+      "consequence": "A builder or later reviewer cannot reliably jump from the claimed locator to the supporting passage.",
+      "acceptance_condition": "Replace each affected locator with the exact journal/PDF page and section or figure: Fawcett p. 861 / PDF page 2, Figure 1 and the paragraph beginning 'Given a classifier and an instance'."
+    }
+  ],
+  "qualitative_feedback": "Targeted revision. The research is compact, appropriately scoped, and covers all planned stories, but one central implementation claim needs the official recall-specific zero-division evidence and the Fawcett locators must be corrected. Exact score: 77 weighted points minus zero penalties."
+}
