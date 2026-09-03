@@ -1,0 +1,98 @@
+{
+  "epic_id": "EP-03",
+  "context_revision": 13,
+  "plan_revision": "1.1",
+  "title": "Measure the grader",
+  "purpose": "Enable a learner to turn the human labels and judge predictions produced in EP-01 and EP-02 into a trustworthy grader report that exposes the confusion matrix and prints precision and recall for the defined regression class.",
+  "prerequisites": [
+    "The learner can read and edit basic Python and run Jupyter notebook cells.",
+    "The learner understands that human_label = 1 and judge_label = 1 mean the defined regression is present.",
+    "build/lesson-01/eval_cases.jsonl and build/lesson-02/judge_predictions.jsonl exist with the approved stable case IDs and binary-label semantics."
+  ],
+  "user_stories": [
+    {
+      "user_story_id": "US-L03-01",
+      "title": "Join evidence by identity",
+      "statement": "As an eval maintainer, I want to join human labels and judge predictions by case ID so that row order cannot silently change which prediction is scored against which reference.",
+      "one_idea": "A grader must align reference labels and predictions by stable identity and reject missing, duplicate, unknown, or contradictory records before counting outcomes.",
+      "checkpoints": [],
+      "acceptance_criteria": [
+        "The grader loads both prior artifacts and joins records by case_id rather than list position.",
+        "Validation rejects duplicate, missing, or unknown case IDs and any copied human_label that differs between artifacts.",
+        "The joined records preserve the invariant that label 1 means regression present."
+      ],
+      "estimated_minutes": 2.5,
+      "depends_on": []
+    },
+    {
+      "user_story_id": "US-L03-02",
+      "title": "Count the four outcomes",
+      "statement": "As an evaluator, I want to classify every joined record as TP, FP, FN, or TN so that the aggregate score remains traceable to concrete cases.",
+      "one_idea": "The confusion matrix is a partition of aligned binary decisions whose four counts must sum to the number of scored cases.",
+      "checkpoints": [],
+      "acceptance_criteria": [
+        "The lesson defines TP, FP, FN, and TN using regression present as the positive class.",
+        "Each joined case is assigned to exactly one outcome and remains inspectable by case_id.",
+        "The grader verifies that TP + FP + FN + TN equals the number of joined cases."
+      ],
+      "estimated_minutes": 2.5,
+      "depends_on": ["US-L03-01"]
+    },
+    {
+      "user_story_id": "US-L03-03",
+      "title": "Read precision and recall",
+      "statement": "As an AI feature owner, I want precision and recall tied to operational questions so that I can distinguish false alarms from missed regressions.",
+      "one_idea": "Precision measures how often regression alarms are correct, while recall measures how many human-labeled regressions the judge catches.",
+      "checkpoints": [],
+      "acceptance_criteria": [
+        "Precision is computed as TP / (TP + FP) and recall as TP / (TP + FN).",
+        "The lesson connects false positives to false alarms and false negatives to missed regressions without collapsing the two metrics into accuracy.",
+        "Both formulas define zero-division behavior explicitly as 0.0 and the report records that policy."
+      ],
+      "estimated_minutes": 2.5,
+      "depends_on": ["US-L03-02"]
+    },
+    {
+      "user_story_id": "US-L03-04",
+      "title": "Prove and persist the grader report",
+      "statement": "As an eval maintainer, I want deterministic expected values and a persisted report so that the final metrics can be reproduced and audited offline.",
+      "one_idea": "A metric pipeline is trustworthy only when a known fixture proves its counts and derived values and the same checked result is persisted.",
+      "checkpoints": [
+        {
+          "checkpoint_id": "CP-L03-03-A",
+          "capability": "Build a confusion matrix from judge predictions and print precision and recall with zero-division handling.",
+          "observable_check": "After completing US-L03-01 through US-L03-04, a fresh-kernel notebook run joins at least 10 prior-artifact records by case_id, validates label alignment, prints the fixture's TP, FP, FN, TN, precision, and recall, writes grader_report.json, reloads it, and ends with PASS."
+        }
+      ],
+      "acceptance_criteria": [
+        "The deterministic fixture contains at least 10 unique case IDs and produces exact predeclared TP, FP, FN, TN, precision, and recall values.",
+        "grader_report.json contains the positive-class definition, zero-division policy, case count, all four counts, precision, and recall.",
+        "The persisted report is reloaded and compared with the checked in-memory result before a final PASS is printed."
+      ],
+      "estimated_minutes": 2.5,
+      "depends_on": ["US-L03-03"]
+    }
+  ],
+  "build_along": {
+    "estimated_minutes": 18,
+    "input_artifact": "build/lesson-01/eval_cases.jsonl and build/lesson-02/judge_predictions.jsonl",
+    "output_artifact": "build/lesson-03/grader_report.json",
+    "visible_checks": [
+      "Load both prior artifacts, assert and print that each contains at least 10 records, and print the inherited positive-class definition.",
+      "Validate binary labels, unique IDs, exact case-ID coverage, and matching copied human labels; join by case_id and print PASS.",
+      "Classify each case as TP, FP, FN, or TN, print the case-level outcomes, and prove that the four counts sum to the joined case count.",
+      "Compute and print precision and recall with an explicit 0.0 zero-division policy; assert exact predeclared fixture counts and metric values over at least 10 case IDs.",
+      "Write grader_report.json, reload and compare it with the in-memory report, print the output path, and end with a final PASS."
+    ],
+    "offline_replay": "The canonical Jupyter notebook uses Python 3.12 and only the repository-contained EP-01 and EP-02 artifacts. From a fresh kernel it validates and joins records by case_id, computes and verifies the confusion matrix, precision, and recall, persists and reloads grader_report.json, and prints all declared checks without network access, API keys, model weights, or paid calls. The executed notebook and actual output are recorded under output/lesson-03/."
+  },
+  "capstone_trace": [
+    "CONTEXT.md breaking point 3 identifies the learner failure addressed by this epic: aggregate accuracy can hide missed regressions or excessive false alarms. US-L03-02 exposes the four outcomes and US-L03-03 separates those costs through precision and recall.",
+    "CP-L03-03-A directly completes the capstone by producing a working grader that prints a confusion matrix, precision, and recall for the explicitly defined positive class with zero-division handling.",
+    "The grader consumes both approved upstream artifacts, joins by stable case_id, and verifies copied human labels so the cumulative build does not restart or silently alter EP-01 and EP-02 semantics.",
+    "build/lesson-03/grader_report.json is the final cumulative artifact and is independently useful as an auditable machine-readable summary of the grader's population, policy, counts, and metrics.",
+    "The fixture contains at least 10 stable case IDs and provides a deterministic capstone oracle with predeclared TP, FP, FN, TN, precision, and recall; count conservation plus report round-trip checks make the printed result reproducible and give the metrics a useful sample.",
+    "Searcher brief: research only EP-03 claims needed to define binary confusion-matrix outcomes, precision, recall, positive-class interpretation, and explicit zero-division behavior; write only agent/evals-course-factory/output/lesson-03/searcher/sources.json. Do not research or draft broader metric catalogs, threshold tuning, multiclass evaluation, lesson prose, notebook code, or live-provider integrations.",
+    "Builder brief: consume only this approved plan, approved EP-03 research, build/lesson-01/eval_cases.jsonl, and build/lesson-02/judge_predictions.jsonl; write course/lesson-03.md plus the notebook and persisted grader report under build/lesson-03/, with actual executed results only under output/lesson-03/. As explicitly requested by the human, expand the cumulative fixture chain to at least 10 stable case IDs by minimally updating the EP-01 dataset/notebook/executed output and the corresponding EP-02 cached responses/predictions/notebook/executed output while preserving schemas, label semantics, lesson flow, and existing user edits. Preserve four text-only, one-idea Lesson 03 sections of 300-500 words and about 2-3 minutes each, followed by exactly one incremental build-along of at most 20 minutes. Use an editable Jupyter notebook that runs offline top-to-bottom from a fresh kernel on Python 3.12, prints every declared visible check, joins by case_id, preserves label semantics, asserts at least 10 cases, and persists grader_report.json. Do not use Mermaid, raster images, quizzes, flashcards, video, audio, paid calls, model weights, live-provider integration, multiclass metrics, or threshold tuning."
+  ]
+}
