@@ -1,0 +1,126 @@
+{
+  "epic_id": "EP-03",
+  "context_revision": 14,
+  "plan_revision": "1.1",
+  "sources": [
+    {
+      "source_id": "SRC-L03-001",
+      "title": "An introduction to ROC analysis",
+      "authors": ["Tom Fawcett"],
+      "year": 2006,
+      "source_type": "paper",
+      "url": "https://www.math.ucdavis.edu/~saito/data/roc/fawcett-roc.pdf",
+      "doi_or_arxiv": "10.1016/j.patrec.2005.10.010",
+      "authority_note": "Peer-reviewed Pattern Recognition Letters paper; its Figure 1 and binary-classification discussion define the four confusion-matrix outcomes and common metrics."
+    },
+    {
+      "source_id": "SRC-L03-002",
+      "title": "precision_score — scikit-learn documentation",
+      "authors": ["scikit-learn developers"],
+      "year": 2026,
+      "source_type": "official_documentation",
+      "url": "https://scikit-learn.org/stable/modules/generated/sklearn.metrics.precision_score.html",
+      "doi_or_arxiv": null,
+      "authority_note": "Current official API documentation; specifies binary positive-label semantics and the zero_division parameter and behavior."
+    },
+    {
+      "source_id": "SRC-L03-004",
+      "title": "recall_score — scikit-learn documentation",
+      "authors": ["scikit-learn developers"],
+      "year": 2026,
+      "source_type": "official_documentation",
+      "url": "https://scikit-learn.org/stable/modules/generated/sklearn.metrics.recall_score.html",
+      "doi_or_arxiv": null,
+      "authority_note": "Current official API documentation; specifies binary recall and the zero_division parameter and behavior."
+    },
+    {
+      "source_id": "SRC-L03-003",
+      "title": "Impact of Sample Size on Confidence Intervals",
+      "authors": ["Penn State Department of Statistics"],
+      "year": 2026,
+      "source_type": "authoritative_technical",
+      "url": "https://online.stat.psu.edu/stat200/lesson/4/4.7",
+      "doi_or_arxiv": null,
+      "authority_note": "University statistics course material explaining that increasing sample size decreases standard error and narrows confidence intervals."
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "CLM-L03-001",
+      "claim": "For a binary decision, a positive instance predicted positive is a true positive; positive predicted negative is a false negative; negative predicted positive is a false positive; and negative predicted negative is a true negative. These four mutually exclusive outcomes form the confusion matrix.",
+      "source_ids": ["SRC-L03-001"],
+      "source_locator": "Journal p. 861 / PDF page 2, Figure 1 and paragraph beginning ‘Given a classifier and an instance, there are four possible outcomes.’",
+      "support": "Fawcett explicitly enumerates the four outcomes and presents them in a 2×2 confusion matrix.",
+      "scope": "Binary classification with a designated positive and negative class.",
+      "limitations": "Does not prescribe the lesson's regression domain or case-ID schema.",
+      "inference": false,
+      "user_story_ids": ["US-L03-02"]
+    },
+    {
+      "claim_id": "CLM-L03-002",
+      "claim": "With regression present defined as the positive class, precision is TP/(TP+FP): the fraction of predicted regression alarms that are correct; recall is TP/(TP+FN): the fraction of human-labeled regressions detected.",
+      "source_ids": ["SRC-L03-001", "SRC-L03-002"],
+      "source_locator": "Fawcett journal p. 861 / PDF page 2, Figure 1 formulas and following text; scikit-learn precision_score documentation, ‘Notes’ and ‘Returns’.",
+      "support": "The paper gives the formulas; the official API describes binary precision for the positive class.",
+      "scope": "Binary positive-class scoring; operational alarm/missed-regression wording is an interpretation of the denominators.",
+      "limitations": "Precision and recall are sample estimates and do not alone characterize all grader behavior.",
+      "inference": true,
+      "user_story_ids": ["US-L03-03"]
+    },
+    {
+      "claim_id": "CLM-L03-003",
+      "claim": "A metric computation must make its positive-class convention explicit: ‘positive’ is the condition the evaluator is trying to detect, not inherently the numerical value 1.",
+      "source_ids": ["SRC-L03-001", "SRC-L03-002"],
+      "source_locator": "Fawcett journal p. 861 / PDF page 2, Figure 1 labels p/n and text on actual versus predicted class; scikit-learn parameter pos_label and binary precision description.",
+      "support": "Both sources frame metrics relative to a designated positive class and expose/configure that class.",
+      "scope": "Binary classification and this lesson's declared convention human_label=1 means regression present.",
+      "limitations": "The specific regression convention is a course decision, not a fact established by the sources.",
+      "inference": true,
+      "user_story_ids": ["US-L03-01", "US-L03-03", "US-L03-04"]
+    },
+    {
+      "claim_id": "CLM-L03-004",
+      "claim": "Precision is undefined when TP+FP is zero, and recall is undefined when TP+FN is zero; an implementation should state and consistently apply a zero-division policy. Returning 0.0 is an explicit defensible course policy.",
+      "source_ids": ["SRC-L03-002", "SRC-L03-004"],
+      "source_locator": "scikit-learn precision_score documentation, parameter zero_division and Notes (‘true positive + false positive == 0’); recall_score documentation, parameter zero_division and Notes (‘true positive + false negative == 0’).",
+      "support": "The official precision API documents the TP+FP undefined case, and the official recall API documents the TP+FN undefined case; both expose configurable zero_division values, including 0.0.",
+      "scope": "Precision API behavior; the analogous recall denominator follows the same TP-over-relevant-positive structure.",
+      "limitations": "The source does not require 0.0 specifically; selecting it for this lesson is a course policy and should be reported.",
+      "inference": true,
+      "user_story_ids": ["US-L03-03", "US-L03-04"]
+    },
+    {
+      "claim_id": "CLM-L03-005",
+      "claim": "Joining reference labels and predictions by stable case identity before scoring is necessary to ensure each prediction is compared with its intended reference; this is an implementation integrity requirement inferred from paired y_true/y_pred definitions, not a metric formula.",
+      "source_ids": ["SRC-L03-002"],
+      "source_locator": "scikit-learn precision_score documentation, y_true and y_pred parameter definitions (‘ground truth’ and ‘estimated targets’ with matching sample shape).",
+      "support": "The API requires paired truth and prediction entries for the same samples; identity-based joining is the lesson's safe implementation of that pairing across artifacts.",
+      "scope": "Two persisted artifacts that may have independent row order.",
+      "limitations": "The documentation does not discuss case IDs, duplicate detection, or cross-file joins.",
+      "inference": true,
+      "user_story_ids": ["US-L03-01"]
+    },
+    {
+      "claim_id": "CLM-L03-006",
+      "claim": "Increasing the evaluation sample generally reduces sampling variation and narrows confidence intervals, making reported proportions easier to interpret; no universal minimum such as 10 cases follows from this evidence.",
+      "source_ids": ["SRC-L03-003"],
+      "source_locator": "Penn State STAT 200 lesson, paragraphs ‘With a larger sample size…’ and example increasing n from 20 to 200.",
+      "support": "The university material explains lower standard error and narrower intervals with larger samples.",
+      "scope": "General sampling/proportion interpretation; applies directionally to empirical grader rates.",
+      "limitations": "A larger sample does not fix biased or nonrepresentative cases, and the source gives no universal sufficiency threshold. The plan's at-least-10 requirement is a course fixture constraint.",
+      "inference": true,
+      "user_story_ids": ["US-L03-04"]
+    }
+  ],
+  "coverage": [
+    {"user_story_id": "US-L03-01", "claim_ids": ["CLM-L03-003", "CLM-L03-005"], "status": "covered"},
+    {"user_story_id": "US-L03-02", "claim_ids": ["CLM-L03-001"], "status": "covered"},
+    {"user_story_id": "US-L03-03", "claim_ids": ["CLM-L03-002", "CLM-L03-003", "CLM-L03-004"], "status": "covered"},
+    {"user_story_id": "US-L03-04", "claim_ids": ["CLM-L03-003", "CLM-L03-004", "CLM-L03-006"], "status": "covered"}
+  ],
+  "evidence_gaps": [
+    "No authoritative source found that specifies case-ID joins, duplicate/missing-ID validation, or copied-label consistency across separate evaluation artifacts; these remain implementation requirements inferred from paired truth/prediction semantics.",
+    "No source supports a universal minimum of 10 evaluation cases or statistical sufficiency of n=10; retain the at-least-10 rule only as the human-requested course fixture constraint.",
+    "No source was needed or sought for multiclass, threshold tuning, ranking metrics, or live-provider behavior because the approved plan explicitly excludes them."
+  ]
+}
