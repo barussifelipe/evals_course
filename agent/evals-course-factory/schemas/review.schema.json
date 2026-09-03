@@ -9,7 +9,7 @@
     "judgee": {"enum": ["orchestrator", "searcher", "builder"]},
     "artifact_revision": {"type": "string", "minLength": 1},
     "context_revision": {"type": "integer", "minimum": 0},
-    "verExpladict": {"enum": ["approved", "targeted_revision", "substantial_revision", "rejected"]},
+    "verdict": {"enum": ["approved", "targeted_revision", "substantial_revision", "rejected"]},
     "total_score": {"type": "number", "minimum": 0, "maximum": 100},
     "penalty_total": {"type": "number", "minimum": 0, "maximum": 10},
     "penalties": {
