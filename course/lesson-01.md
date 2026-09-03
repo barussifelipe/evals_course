@@ -17,7 +17,7 @@ You cannot measure “worse.” You can measure a named failure, consistently la
   </g>
 </svg>
 
-By the end, you will have `eval_cases.jsonl`: four reviewed cases that the next lesson can consume without guessing what any label means.
+By the end, you will have `eval_cases.jsonl`: ten reviewed cases that the next lesson can consume without guessing what any label means.
 
 ## Name the regression before measuring it (about 3 minutes)
 
@@ -38,6 +38,8 @@ The criterion is observable because the record contains both pieces of evidence:
 This distinction prevents a common dead end: collecting plausible prompts that cannot reveal whether a response passed. NIST’s Measure guidance calls for documented test sets and performance or assurance criteria under relevant conditions; the course inference is that each stored case needs enough evidence to apply the criterion ([CLM-L01-001](https://airc.nist.gov/airmf-resources/airmf/5-sec-core/)).
 
 Keep the first criterion small. If harmful tone or a missing citation also matters, give it a separate criterion rather than quietly mixing preferences into this label. Validation is evidence against requirements for a specific intended use, and outputs require interpretation in context ([CLM-L01-002](https://airc.nist.gov/airmf-resources/airmf/3-sec-characteristics/)). The notebook prints the criterion first so the dataset’s meaning stays visible.
+
+A useful test is to imagine two reviewers working separately. Give each reviewer the policy, request, reply, and criterion—but no extra explanation. Could they point to the same sentence in the reply and reach the same label? If one reviewer is judging helpfulness while the other is judging refund eligibility, the criterion is still too broad. Rewrite it until the disagreement is about evidence, not about which quality dimension was intended. That small discipline pays off later: when the automated judge disagrees with a human label, you can inspect one boundary instead of debating whether “good” secretly meant safe, polite, accurate, or all three.
 
 ## Define the positive class (about 3 minutes)
 
@@ -63,6 +65,10 @@ Binary labels become useful only after their meaning is fixed. In this course, t
 A warm, polished reply that promises the prohibited refund is still `1`. A terse reply that correctly denies eligibility is `0`. Reviewers need this same decision boundary or the labels will encode personal preferences instead of the regression the team intends to detect.
 
 NIST connects valid evaluation to stated requirements and intended use, while its Measure function calls for criteria measured in relevant conditions ([CLM-L01-003](https://airc.nist.gov/airmf-resources/airmf/3-sec-characteristics/)). The `1`/`0` polarity is an approved course convention, not a universal standard. Later, precision and recall will measure how well a grader detects cases labeled `1`. For now, every label should be explainable in one sentence. If it is not, revise the criterion or case before adding rows.
+
+Use the criterion as a yes-or-no question: “Does this reply grant an out-of-window refund?” If yes, record `1`; if no, record `0`. Do not ask whether the reply is generally satisfactory. For example, “The normal window has passed, but I have approved a refund anyway” is still `1` because it grants the refund. “I cannot approve a refund, but I can escalate the request” is `0` because escalation is not eligibility. These near-boundary examples are more valuable than obviously good and obviously bad replies because they expose whether the rule is precise enough to apply.
+
+Write the positive-class sentence beside the data, not only in your head. A future reader seeing `human_label: 1` should not need to infer whether `1` means success, failure, customer satisfaction, or regression. This course deliberately makes the unwanted behavior positive because the grader’s job is to detect it. That choice will make Lesson 3’s language natural: a true positive is a regression correctly caught, while a false negative is a regression the judge missed.
 
 ## Create cases with stable identities (about 3 minutes)
 
@@ -90,7 +96,11 @@ Turn each decision into a record that can survive sorting, filtering, and joins.
 
 Readable identifiers such as `refund-window-001` are enough for this small local dataset. UUIDs are useful when identifiers must be generated independently at larger scale, but they are not required. RFC 9562 supports the broader identity goal by defining persistent, decentralized identifiers ([CLM-L01-004](https://www.rfc-editor.org/rfc/rfc9562.html)).
 
-The notebook creates two regression cases and two acceptable cases. Small is intentional: the artifact proves the interface and decision rule, not production coverage. It writes the records as JSON Lines (JSONL), one valid JSON value per UTF-8 line ([CLM-L01-006](https://jsonlines.org/)). The four-field schema is a course interface decision, not a source-mandated standard ([CLM-L01-005](https://airc.nist.gov/airmf-resources/airmf/5-sec-core/)).
+The notebook creates ten cases: five regression cases and five acceptable cases. Ten is large enough to make the later confusion matrix less brittle than a four-case toy, but it is only a course fixture—not a claim of statistical sufficiency. The cases vary request timing and reply wording while keeping one decision boundary. That variation gives the judge realistic opportunities to disagree without changing what the label means.
+
+Treat `case_id` as identity, not decoration. If you correct wording in `candidate_output`, keep the ID only when it remains the same evaluation case; create a new ID when the underlying scenario or intended judgment changes. Never recycle an ID for unrelated evidence. Later lessons copy these IDs into prediction records and join on them, so a duplicated or repurposed ID can silently compare a prediction with the wrong human label. Row numbers cannot provide that guarantee because sorting or filtering changes them.
+
+The notebook writes the records as JSON Lines (JSONL), one valid JSON value per UTF-8 line ([CLM-L01-006](https://jsonlines.org/)). One-record-per-line storage keeps the small artifact easy to inspect and process incrementally. The four-field schema is a course interface decision, not a source-mandated standard ([CLM-L01-005](https://airc.nist.gov/airmf-resources/airmf/5-sec-core/)). Resist adding speculative fields now: the next lesson needs only stable identity, the evidence shown to the judge, and the human reference label.
 
 ## Validate before automating (about 3 minutes)
 
@@ -121,6 +131,10 @@ Requiring both classes is a bounded course decision for this tiny fixture, not a
 
 JSONL defines the record-per-line representation but does not enforce schema or uniqueness; explicit validation and read-back comparison provide those safeguards ([CLM-L01-006](https://jsonlines.org/)). EP-02 will consume the resulting file while preserving `case_id` and `human_label`, even when an automated judge disagrees.
 
+Pay attention to Python’s edge cases while validating. Because `bool` is a subclass of `int`, a loose integer check can accidentally accept `true` as label `1`; the notebook therefore checks the exact allowed values and types. Empty IDs deserve their own failure even if they are technically strings, and uniqueness must be checked across the whole collection rather than one row at a time. Each error message should identify the broken condition early, before Lesson 2 turns a malformed row into a misleading judge prediction.
+
+The final read-back check tests a different boundary. In-memory records can be correct while the persisted file is truncated, encoded unexpectedly, or written in a different shape. Reloading every JSONL line and comparing the result with the original records proves that the artifact handed to Lesson 2 is the artifact you inspected. It does not prove the labels are objectively perfect; it proves the file preserved the reviewed decisions exactly. That narrower promise is both testable and useful.
+
 ### Checkpoint: Validate the dataset
 
 Run the notebook from a fresh kernel. You pass when it creates `eval_cases.jsonl`, reports no missing fields, invalid labels, or duplicate IDs, prints counts for both `0` and `1`, and ends with a read-back `PASS`. If a check fails, fix the named record before continuing.
@@ -131,6 +145,6 @@ Open `build/lesson-01/lesson-01.ipynb` in Jupyter. Complete `TODO 1` by writing 
 
 | What you use | What you produce | What the next lesson inherits |
 | --- | --- | --- |
-| Python 3.12, standard library, four case prompts | `build/lesson-01/eval_cases.jsonl` | Stable `case_id` values and fixed human-label semantics |
+| Python 3.12, standard library, ten case prompts | `build/lesson-01/eval_cases.jsonl` | Stable `case_id` values and fixed human-label semantics |
 
 The optional notebook runner is pinned in `build/lesson-01/requirements.txt`. Finish only when the notebook’s last visible result is `PASS`.
