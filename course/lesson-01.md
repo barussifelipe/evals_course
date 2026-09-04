@@ -35,9 +35,9 @@ The criterion is observable because the record contains both pieces of evidence:
 | May look realistic | States the decision rule |
 | Cannot establish pass or failure alone | Records a human decision against that rule |
 
-This distinction prevents a common dead end: collecting plausible prompts that cannot reveal whether a response passed. NIST’s Measure guidance calls for documented test sets and performance or assurance criteria under relevant conditions; the course inference is that each stored case needs enough evidence to apply the criterion ([CLM-L01-001](https://airc.nist.gov/airmf-resources/airmf/5-sec-core/)).
+This distinction prevents a common dead end: collecting plausible prompts that cannot reveal whether a response passed. NIST’s Measure guidance calls for documented test sets and performance or assurance criteria under relevant conditions; the course inference is that each stored case needs enough evidence to apply the criterion ([See more here](https://airc.nist.gov/airmf-resources/airmf/5-sec-core/)).
 
-Keep the first criterion small. If harmful tone or a missing citation also matters, give it a separate criterion rather than quietly mixing preferences into this label. Validation is evidence against requirements for a specific intended use, and outputs require interpretation in context ([CLM-L01-002](https://airc.nist.gov/airmf-resources/airmf/3-sec-characteristics/)). The notebook prints the criterion first so the dataset’s meaning stays visible.
+Keep the first criterion small. If harmful tone or a missing citation also matters, give it a separate criterion rather than quietly mixing preferences into this label. Validation is evidence against requirements for a specific intended use, and outputs require interpretation in context ([See more here](https://airc.nist.gov/airmf-resources/airmf/3-sec-characteristics/)). The notebook prints the criterion first so the dataset’s meaning stays visible.
 
 A useful test is to imagine two reviewers working separately. Give each reviewer the policy, request, reply, and criterion—but no extra explanation. Could they point to the same sentence in the reply and reach the same label? If one reviewer is judging helpfulness while the other is judging refund eligibility, the criterion is still too broad. Rewrite it until the disagreement is about evidence, not about which quality dimension was intended. That small discipline pays off later: when the automated judge disagrees with a human label, you can inspect one boundary instead of debating whether “good” secretly meant safe, polite, accurate, or all three.
 
@@ -64,7 +64,7 @@ Binary labels become useful only after their meaning is fixed. In this course, t
 
 A warm, polished reply that promises the prohibited refund is still `1`. A terse reply that correctly denies eligibility is `0`. Reviewers need this same decision boundary or the labels will encode personal preferences instead of the regression the team intends to detect.
 
-NIST connects valid evaluation to stated requirements and intended use, while its Measure function calls for criteria measured in relevant conditions ([CLM-L01-003](https://airc.nist.gov/airmf-resources/airmf/3-sec-characteristics/)). The `1`/`0` polarity is an approved course convention, not a universal standard. Later, precision and recall will measure how well a grader detects cases labeled `1`. For now, every label should be explainable in one sentence. If it is not, revise the criterion or case before adding rows.
+NIST connects valid evaluation to stated requirements and intended use, while its Measure function calls for criteria measured in relevant conditions ([See more here](https://airc.nist.gov/airmf-resources/airmf/3-sec-characteristics/)). The `1`/`0` polarity is an approved course convention, not a universal standard. Later, precision and recall will measure how well a grader detects cases labeled `1`. For now, every label should be explainable in one sentence. If it is not, revise the criterion or case before adding rows.
 
 Use the criterion as a yes-or-no question: “Does this reply grant an out-of-window refund?” If yes, record `1`; if no, record `0`. Do not ask whether the reply is generally satisfactory. For example, “The normal window has passed, but I have approved a refund anyway” is still `1` because it grants the refund. “I cannot approve a refund, but I can escalate the request” is `0` because escalation is not eligibility. These near-boundary examples are more valuable than obviously good and obviously bad replies because they expose whether the rule is precise enough to apply.
 
@@ -94,13 +94,13 @@ Turn each decision into a record that can survive sorting, filtering, and joins.
   </g>
 </svg>
 
-Readable identifiers such as `refund-window-001` are enough for this small local dataset. UUIDs are useful when identifiers must be generated independently at larger scale, but they are not required. RFC 9562 supports the broader identity goal by defining persistent, decentralized identifiers ([CLM-L01-004](https://www.rfc-editor.org/rfc/rfc9562.html)).
+Readable identifiers such as `refund-window-001` are enough for this small local dataset. UUIDs are useful when identifiers must be generated independently at larger scale, but they are not required. RFC 9562 supports the broader identity goal by defining persistent, decentralized identifiers ([See more here](https://www.rfc-editor.org/rfc/rfc9562.html)).
 
 The notebook creates ten cases: five regression cases and five acceptable cases. Ten is large enough to make the later confusion matrix less brittle than a four-case toy, but it is only a course fixture—not a claim of statistical sufficiency. The cases vary request timing and reply wording while keeping one decision boundary. That variation gives the judge realistic opportunities to disagree without changing what the label means.
 
 Treat `case_id` as identity, not decoration. If you correct wording in `candidate_output`, keep the ID only when it remains the same evaluation case; create a new ID when the underlying scenario or intended judgment changes. Never recycle an ID for unrelated evidence. Later lessons copy these IDs into prediction records and join on them, so a duplicated or repurposed ID can silently compare a prediction with the wrong human label. Row numbers cannot provide that guarantee because sorting or filtering changes them.
 
-The notebook writes the records as JSON Lines (JSONL), one valid JSON value per UTF-8 line ([CLM-L01-006](https://jsonlines.org/)). One-record-per-line storage keeps the small artifact easy to inspect and process incrementally. The four-field schema is a course interface decision, not a source-mandated standard ([CLM-L01-005](https://airc.nist.gov/airmf-resources/airmf/5-sec-core/)). Resist adding speculative fields now: the next lesson needs only stable identity, the evidence shown to the judge, and the human reference label.
+The notebook writes the records as JSON Lines (JSONL), one valid JSON value per UTF-8 line ([See more here](https://jsonlines.org/)). One-record-per-line storage keeps the small artifact easy to inspect and process incrementally. The four-field schema is a course interface decision, not a source-mandated standard ([See more here](https://airc.nist.gov/airmf-resources/airmf/5-sec-core/)). Resist adding speculative fields now: the next lesson needs only stable identity, the evidence shown to the judge, and the human reference label.
 
 ## Validate before automating (about 3 minutes)
 
@@ -129,7 +129,7 @@ Writing a file is not proof that it is an evaluation set. Validate at the shared
 
 Requiring both classes is a bounded course decision for this tiny fixture, not a universal balance rule or proof of statistical representativeness. It ensures the learner sees an acceptable case beside a regression and prepares later lessons to exercise both sides of the binary interface.
 
-JSONL defines the record-per-line representation but does not enforce schema or uniqueness; explicit validation and read-back comparison provide those safeguards ([CLM-L01-006](https://jsonlines.org/)). EP-02 will consume the resulting file while preserving `case_id` and `human_label`, even when an automated judge disagrees.
+JSONL defines the record-per-line representation but does not enforce schema or uniqueness; explicit validation and read-back comparison provide those safeguards ([See more here](https://jsonlines.org/)). Lesson 2 will consume the resulting file while preserving `case_id` and `human_label`, even when an automated judge disagrees.
 
 Pay attention to Python’s edge cases while validating. Because `bool` is a subclass of `int`, a loose integer check can accidentally accept `true` as label `1`; the notebook therefore checks the exact allowed values and types. Empty IDs deserve their own failure even if they are technically strings, and uniqueness must be checked across the whole collection rather than one row at a time. Each error message should identify the broken condition early, before Lesson 2 turns a malformed row into a misleading judge prediction.
 
