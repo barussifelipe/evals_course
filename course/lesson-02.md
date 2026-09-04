@@ -34,11 +34,11 @@ Write one bounded rubric instead. Its task is narrow: decide whether the candida
   </g>
 </svg>
 
-This is more than prompt tidiness. Criteria-driven judging asks the evaluator to receive an evaluation task and explicit criteria, then return a constrained form-like result instead of an unconstrained quality impression ([CLM-L02-RUBRIC-001](https://aclanthology.org/2023.emnlp-main.153/)). Here, the form is deliberately small: one verdict and one evidence-based reason. It gives a reviewer a concrete thing to inspect when the output seems surprising.
+This is more than prompt tidiness. Criteria-driven judging asks the evaluator to receive an evaluation task and explicit criteria, then return a constrained form-like result instead of an unconstrained quality impression ([See more here](https://aclanthology.org/2023.emnlp-main.153/)). Here, the form is deliberately small: one verdict and one evidence-based reason. It gives a reviewer a concrete thing to inspect when the output seems surprising.
 
 Keep the wording tied to evidence visible in each record. For a day-45 request, a reply that says “eligible for a full refund” is present. A reply that says the 30-day window has passed is absent. For a day-12 request, a refund may be appropriate, so the same word “refund” is not enough by itself. The policy, request date, and claim in the reply must be read together.
 
-Do not let a polished answer drift the verdict. Research on LLM judges reports useful agreement with human preferences alongside position, verbosity, and self-enhancement biases ([CLM-L02-BIAS-001](https://arxiv.org/abs/2306.05685)). A bounded rubric reduces irrelevant room for preference; it does not make the judge authoritative. The notebook therefore renders a request without `human_label` and keeps human labels separate until disagreement inspection.
+Do not let a polished answer drift the verdict. Research on LLM judges reports useful agreement with human preferences alongside position, verbosity, and self-enhancement biases ([See more here](https://arxiv.org/abs/2306.05685)). A bounded rubric reduces irrelevant room for preference; it does not make the judge authoritative. The notebook therefore renders a request without `human_label` and keeps human labels separate until disagreement inspection.
 
 ## Make responses replayable (about 3 minutes)
 
@@ -63,11 +63,11 @@ Calling a provider during every review creates a moving target: the model, servi
 
 The cache’s contract is intentionally strict. `case_id` says which Lesson 01 case the response belongs to. `verdict` may be only `REGRESSION_PRESENT` or `REGRESSION_ABSENT`. `reason` must be a non-empty, evidence-based explanation. No score, confidence, alternate label, or extra field is needed for this binary pipeline. Fewer fields leave fewer opportunities for a later step to invent a meaning it cannot justify.
 
-Named fields and required fields are useful boundary checks: JSON Schema defines type and required assertions, and its object-property rules can reject properties not covered by the declared contract ([CLM-L02-CONTRACT-001](https://json-schema.org/draft/2020-12/json-schema-core.html)). The notebook uses small standard-library checks rather than a new schema dependency, then adds cross-record checks that a field schema cannot provide: every case must appear once and only once.
+Named fields and required fields are useful boundary checks: JSON Schema defines type and required assertions, and its object-property rules can reject properties not covered by the declared contract ([See more here](https://json-schema.org/draft/2020-12/json-schema-core.html)). The notebook uses small standard-library checks rather than a new schema dependency, then adds cross-record checks that a field schema cannot provide: every case must appear once and only once.
 
 Cached replay makes the teaching path reproducible. It needs no network, API key, model weights, or paid call, so a learner can rerun parsing and alignment while inspecting exactly the same evidence. It also lets a reviewer audit why a stored prediction was produced rather than receiving a fresh opaque answer. Version the rubric text beside the code if you later change its decision rule; a response produced under a different rubric is a different evaluation input.
 
-There is an important ceiling: cached results exercise this pipeline, not a live provider. They cannot measure current model behavior, provider changes, or response variance ([CLM-L02-CACHE-001](https://arxiv.org/abs/2306.05685)). That is acceptable here because the next lesson needs stable prediction records before it can teach measurement. Add controlled live sampling only when you are ready to study that separate question.
+There is an important ceiling: cached results exercise this pipeline, not a live provider. They cannot measure current model behavior, provider changes, or response variance ([See more here](https://arxiv.org/abs/2306.05685)). That is acceptable here because the next lesson needs stable prediction records before it can teach measurement. Add controlled live sampling only when you are ready to study that separate question.
 
 ## Parse and align predictions (about 3 minutes)
 
@@ -86,11 +86,11 @@ Field validation is necessary but incomplete. A perfectly shaped response for an
   </g>
 </svg>
 
-Stable identity is the shared interface across this course. The one-to-one join is an explicit course invariant built on a field-level contract, rather than a behavior the JSON Schema standard supplies by itself ([CLM-L02-ALIGN-001](https://json-schema.org/draft/2020-12/json-schema-core.html)). In practical terms, build a dictionary keyed by `case_id`, then traverse the original evaluation cases. That preserves their order for readable output while making the lookup identity-based.
+Stable identity is the shared interface across this course. The one-to-one join is an explicit course invariant built on a field-level contract, rather than a behavior the JSON Schema standard supplies by itself ([See more here](https://json-schema.org/draft/2020-12/json-schema-core.html)). In practical terms, build a dictionary keyed by `case_id`, then traverse the original evaluation cases. That preserves their order for readable output while making the lookup identity-based.
 
 The output record has four fields: `case_id`, `human_label`, `judge_label`, and `judge_reason`. Copy the first two unchanged from Lesson 01. Convert only the validated verdict: present becomes `1`; absent becomes `0`. The reason comes from the cached response unchanged so a later reviewer can see the judge’s stated evidence. The notebook asserts the copied `(case_id, human_label)` pairs match the input exactly before it writes anything.
 
-Notice what this section does not do. It does not count correct predictions, create a confusion matrix, or calculate precision or recall. Those are EP-03 questions. This boundary protects against a tempting shortcut: scoring records before you know whether every case was represented correctly.
+Notice what this section does not do. It does not count correct predictions, create a confusion matrix, or calculate precision or recall. Those are Lesson 3 questions. This boundary protects against a tempting shortcut: scoring records before you know whether every case was represented correctly.
 
 ## Inspect disagreements before scoring (about 3 minutes)
 
@@ -112,11 +112,11 @@ After alignment, compare `human_label` and `judge_label` one record at a time. A
   </g>
 </svg>
 
-Treat neither side as automatic truth. The human label may reflect a mistaken reading of the criterion; the cached judge may have misread the policy, imported an irrelevant preference, or applied the rubric inconsistently. LLM-as-judge studies document systematic biases even where judges show substantial agreement with human preferences ([CLM-L02-BIAS-001](https://arxiv.org/abs/2306.05685)). Do not change `human_label` just to make the table look better, and do not relabel the judge output to make it agree. Preserve the evidence and review the underlying case.
+Treat neither side as automatic truth. The human label may reflect a mistaken reading of the criterion; the cached judge may have misread the policy, imported an irrelevant preference, or applied the rubric inconsistently. LLM-as-judge studies document systematic biases even where judges show substantial agreement with human preferences ([See more here](https://arxiv.org/abs/2306.05685)). Do not change `human_label` just to make the table look better, and do not relabel the judge output to make it agree. Preserve the evidence and review the underlying case.
 
 In this fixture, one disagreement is intentional. Its reason claims that a day-33 reply does not explicitly say “eligible,” although the reply says “we will process your refund.” The row gives the team a concrete rubric-review target. Perhaps the rubric needs an example clarifying that an implied approval counts; perhaps the human label or candidate text needs review. The notebook does not decide. It makes the conflict visible.
 
-Finally, persist the records as `build/lesson-02/judge_predictions.jsonl`, reload the file, and compare it to the in-memory records. That read-back check proves the next lesson receives the same case-level evidence you inspected. Cached replay makes this artifact repeatable offline, but it does not measure live-provider variance ([CLM-L02-CACHE-001](https://aclanthology.org/2023.emnlp-main.153/)). Keep the fixture and prediction file together: a reviewer should be able to trace every stored label back to its replayed verdict without reconstructing hidden state. EP-03 will consume these exact records, verify the shared IDs and human labels again, and then compute metrics. For now, stop with a trustworthy disagreement report.
+Finally, persist the records as `build/lesson-02/judge_predictions.jsonl`, reload the file, and compare it to the in-memory records. That read-back check proves the next lesson receives the same case-level evidence you inspected. Cached replay makes this artifact repeatable offline, but it does not measure live-provider variance ([See more here](https://aclanthology.org/2023.emnlp-main.153/)). Keep the fixture and prediction file together: a reviewer should be able to trace every stored label back to its replayed verdict without reconstructing hidden state. Lesson 3 will consume these exact records, verify the shared IDs and human labels again, and then compute metrics. For now, stop with a trustworthy disagreement report.
 
 ### Checkpoint: Inspect aligned judge predictions
 
@@ -126,7 +126,7 @@ Run the notebook from a fresh kernel. You pass when it loads every Lesson 01 cas
 
 Open `build/lesson-02/lesson-02.ipynb` in Jupyter. Complete `TODO 1` by writing the bounded rubric and its two verdict mappings. Then complete `TODO 2` by declaring the cached-response contract. Run each cell after its TODO; the supplied checks explain what remains incomplete before alignment and the final JSONL write. No API key or provider is involved.
 
-| What you use | What you produce | What EP-03 inherits |
+| What you use | What you produce | What Lesson 3 inherits |
 | --- | --- | --- |
 | Python 3.12, `eval_cases.jsonl`, cached responses | `build/lesson-02/judge_predictions.jsonl` | stable IDs, unchanged human labels, judge labels, reasons |
 
